@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.data.biz.mapper.BizFanDatatotalMonthMapper">
+
+	<resultMap type="com.data.biz.domain.BizFanDatatotal"
+		id="BizFanDatatotalMonthResult">
+		<result property="id" column="id" />
+		<result property="fanId" column="fan_id" />
+		<result property="windSpeed" column="wind_speed" />
+		<result property="rotateSpeed" column="rotate_speed" />
+		<result property="powerGeneration" column="power_generation" />
+		<result property="power" column="power" />
+		<result property="leftDriftNum" column="left_drift_num" />
+		<result property="leftDriftAngle" column="left_drift_angle" />
+		<result property="rightDriftNum" column="right_drift_num" />
+		<result property="rightDriftAngle" column="right_drift_angle" />
+		<result property="status" column="status" />
+		<result property="createTime" column="create_time" />
+		<result property="brand" column="brand" />
+	</resultMap>
+
+	<resultMap type="com.data.biz.dto.RunDataDTO"
+		id="RunDataDTOMap">
+		<result property="GeneratingCapacity" column="power_generation" />
+		<result property="AvgWindSpeed" column="wind_speed" />
+		<result property="AvgRotateSpeed" column="rotate_speed" />
+	</resultMap>
+
+
+	<resultMap type="com.data.biz.dto.BatteryLeftDTO"
+		id="BatteryLeftDTOMap">
+		<result property="power_generation"
+			column="power_generation_sum" />
+		<result property="createTime" column="createTime" />
+	</resultMap>
+
+
+	<sql id="selectBizFanDatatotalMonthVo">
+		select id, fan_id, wind_speed, rotate_speed,
+		power_generation, power,
+		left_drift_num, left_drift_angle,
+		right_drift_num, right_drift_angle,
+		status, create_time from
+		biz_fan_datatotal_month
+	</sql>
+
+	<select id="selectBizFanDatatotalMonthList"
+		parameterType="com.data.biz.domain.BizFanDatatotal"
+		resultMap="BizFanDatatotalMonthResult">
+		select bmonth.id, bmonth.fan_id, bmonth.wind_speed,
+		bmonth.rotate_speed, bmonth.power_generation, bmonth.power,
+		bmonth.left_drift_num, bmonth.left_drift_angle,
+		bmonth.right_drift_num,
+		bmonth.right_drift_angle, bmonth.status, bmonth.create_time,bf.brand
+		from biz_fan_datatotal_month as bmonth INNER JOIN biz_fan as bf ON
+		bmonth.fan_id = bf.id
+	</select>
+
+	<select id="selectGeneratingCapacity" parameterType="long"
+		resultType="bigdecimal">
+		select SUM(power_generation) from biz_fan_datatotal_year
+		where fan_id = #{fanId}
+	</select>
+
+	<select id="selectBizFanDatatotalMonthById" parameterType="Long"
+		resultMap="BizFanDatatotalMonthResult">
+		<include refid="selectBizFanDatatotalMonthVo" />
+		where id = #{id}
+	</select>
+
+	<insert id="insertBizFanDatatotalMonth"
+		parameterType="com.data.biz.domain.BizFanDatatotal">
+		insert into biz_fan_datatotal_month
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null ">id,</if>
+			<if test="fanId != null ">fan_id,</if>
+			<if test="windSpeed != null ">wind_speed,</if>
+			<if test="rotateSpeed != null ">rotate_speed,</if>
+			<if test="powerGeneration != null ">power_generation,</if>
+			<if test="power != null ">power,</if>
+			<if test="leftDriftNum != null ">left_drift_num,</if>
+			<if test="leftDriftAngle != null ">left_drift_angle,</if>
+			<if test="rightDriftNum != null ">right_drift_num,</if>
+			<if test="rightDriftAngle != null ">right_drift_angle,</if>
+			<if test="status != null ">status,</if>
+			<if test="createTime != null ">create_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null ">#{id},</if>
+			<if test="fanId != null ">#{fanId},</if>
+			<if test="windSpeed != null ">#{windSpeed},</if>
+			<if test="rotateSpeed != null ">#{rotateSpeed},</if>
+			<if test="powerGeneration != null ">#{powerGeneration},</if>
+			<if test="power != null ">#{power},</if>
+			<if test="leftDriftNum != null ">#{leftDriftNum},</if>
+			<if test="leftDriftAngle != null ">#{leftDriftAngle},</if>
+			<if test="rightDriftNum != null ">#{rightDriftNum},</if>
+			<if test="rightDriftAngle != null ">#{rightDriftAngle},</if>
+			<if test="status != null ">#{status},</if>
+			<if test="createTime != null ">#{createTime},</if>
+		</trim>
+	</insert>
+
+	<update id="updateBizFanDatatotalMonth"
+		parameterType="com.data.biz.domain.BizFanDatatotal">
+		update biz_fan_datatotal_month
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="fanId != null ">fan_id = #{fanId},</if>
+			<if test="windSpeed != null ">wind_speed = #{windSpeed},</if>
+			<if test="rotateSpeed != null ">rotate_speed = #{rotateSpeed},</if>
+			<if test="powerGeneration != null ">power_generation = #{powerGeneration},</if>
+			<if test="power != null ">power = #{power},</if>
+			<if test="leftDriftNum != null ">left_drift_num = #{leftDriftNum},</if>
+			<if test="leftDriftAngle != null ">left_drift_angle = #{leftDriftAngle},</if>
+			<if test="rightDriftNum != null ">right_drift_num = #{rightDriftNum},</if>
+			<if test="rightDriftAngle != null ">right_drift_angle = #{rightDriftAngle},</if>
+			<if test="status != null ">status = #{status},</if>
+			<if test="createTime != null ">create_time = #{createTime},</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<delete id="deleteBizFanDatatotalMonthById" parameterType="Long">
+		delete from biz_fan_datatotal_month where id = #{id}
+	</delete>
+
+	<delete id="deleteBizFanDatatotalMonthByIds"
+		parameterType="String">
+		delete from biz_fan_datatotal_month where id in
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+
+	<select id="selectRunDataDTO" parameterType="long"
+		resultMap="RunDataDTOMap">
+		SELECT AVG(rotate_speed) as rotate_speed,
+		AVG(wind_speed) as
+		wind_speed,
+		SUM(power_generation) as power_generation
+		FROM
+		biz_fan_datatotal_month
+		WHERE fan_id in (SELECT id FROM biz_fan WHERE
+		power_plant_id = #{ppId})
+	</select>
+
+	<select id="getRecentlyPower"
+		resultMap="BizFanDatatotalMonthResult">
+		select sum(power) as power,create_time from
+		biz_fan_datatotal_month
+		where status = 1 GROUP BY create_time order by
+		create_time desc limit 0,12
+	</select>
+
+
+	<select id="selectBatteryLeftBTO" parameterType="long"
+		resultMap="BatteryLeftDTOMap">
+		SELECT SUM(power_generation) as
+		power_generation_sum,create_time as createTime FROM
+		biz_fan_datatotal_month
+		WHERE fan_id in (SELECT id FROM biz_fan WHERE
+		power_plant_id = #{ppId})
+		GROUP BY create_time
+		ORDER BY create_time DESC
+		LIMIT 0,8
+	</select>
+
+
+	<select id="selectBatteryLeftBTONotLimit" parameterType="long"
+		resultMap="BatteryLeftDTOMap">
+		SELECT SUM(power_generation) as
+		power_generation_sum,create_time as createTime FROM
+		biz_fan_datatotal_month
+		WHERE fan_id in (SELECT id FROM biz_fan WHERE
+		power_plant_id = #{ppId})
+		GROUP BY create_time
+		ORDER BY create_time DESC
+	</select>
+
+</mapper>

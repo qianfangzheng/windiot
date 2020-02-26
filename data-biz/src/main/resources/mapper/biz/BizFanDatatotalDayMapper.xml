@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizFanDatatotalDayMapper">
+    
+    <resultMap type="com.data.biz.domain.BizFanDatatotal" id="BizFanDatatotalDayResult">
+        <result property="id"    column="id"    />
+        <result property="fanId"    column="fan_id"    />
+        <result property="windSpeed"    column="wind_speed"    />
+        <result property="rotateSpeed"    column="rotate_speed"    />
+        <result property="powerGeneration"    column="power_generation"    />
+        <result property="power"    column="power"    />
+        <result property="leftDriftNum"    column="left_drift_num"    />
+        <result property="leftDriftAngle"    column="left_drift_angle"    />
+        <result property="rightDriftNum"    column="right_drift_num"    />
+        <result property="rightDriftAngle"    column="right_drift_angle"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+    
+    
+    <resultMap type="com.data.biz.dto.RunDataDTO" id="RunDataDTOMap">
+       <result property="GeneratingCapacity" column="power_generation"/>
+       <result property="AvgWindSpeed" column="wind_speed"/>
+       <result property="AvgRotateSpeed" column="rotate_speed"/>
+    </resultMap>
+    
+    
+    <resultMap type="com.data.biz.dto.BatteryLeftDTO" id="BatteryLeftDTOMap">
+       <result property="power_generation" column="power_generation_sum" />
+       <result property="createTime" column="createTime" />
+    </resultMap>
+    
+    <resultMap type="com.data.biz.dto.AvgPowerDTO" id="AvgPowerDTOMap">
+    <result column="avgpowerday" property="avgPowerDay" />
+    <result column="avgpowermonth" property="avgPowerMonth" />
+    <result column="avgpoweryear" property="avgPowerYear" />
+    </resultMap>
+    
+    <sql id="selectBizFanDatatotalDayVo">
+        select id, fan_id, wind_speed, rotate_speed, power_generation, power, left_drift_num, left_drift_angle, right_drift_num, right_drift_angle, status, create_time from biz_fan_datatotal_day
+    </sql>
+
+    <select id="selectBizFanDatatotalDayList" parameterType="com.data.biz.domain.BizFanDatatotal" resultMap="BizFanDatatotalDayResult">
+        select bday.id, bday.fan_id, bday.wind_speed,
+		bday.rotate_speed, bday.power_generation, bday.power,
+		bday.left_drift_num, bday.left_drift_angle, bday.right_drift_num,
+		bday.right_drift_angle, bday.status, bday.create_time,bf.brand
+		from biz_fan_datatotal_day as bday INNER JOIN biz_fan as bf ON bday.fan_id
+		= bf.id
+    </select>
+    
+    
+    <select id="selectGeneratingCapacity" parameterType="long" resultType="bigdecimal">
+		select SUM(power_generation) from biz_fan_datatotal_day where fan_id = #{fanId}
+	</select>
+    
+    
+    <select id="selectBizFanDatatotalDayById" parameterType="Long" resultMap="BizFanDatatotalDayResult">
+        <include refid="selectBizFanDatatotalDayVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizFanDatatotalDay" parameterType="com.data.biz.domain.BizFanDatatotal">
+        insert into biz_fan_datatotal_day
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="fanId != null ">fan_id,</if>
+            <if test="windSpeed != null ">wind_speed,</if>
+            <if test="rotateSpeed != null ">rotate_speed,</if>
+            <if test="powerGeneration != null ">power_generation,</if>
+            <if test="power != null ">power,</if>
+            <if test="leftDriftNum != null ">left_drift_num,</if>
+            <if test="leftDriftAngle != null ">left_drift_angle,</if>
+            <if test="rightDriftNum != null ">right_drift_num,</if>
+            <if test="rightDriftAngle != null ">right_drift_angle,</if>
+            <if test="status != null ">status,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="fanId != null ">#{fanId},</if>
+            <if test="windSpeed != null ">#{windSpeed},</if>
+            <if test="rotateSpeed != null ">#{rotateSpeed},</if>
+            <if test="powerGeneration != null ">#{powerGeneration},</if>
+            <if test="power != null ">#{power},</if>
+            <if test="leftDriftNum != null ">#{leftDriftNum},</if>
+            <if test="leftDriftAngle != null ">#{leftDriftAngle},</if>
+            <if test="rightDriftNum != null ">#{rightDriftNum},</if>
+            <if test="rightDriftAngle != null ">#{rightDriftAngle},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizFanDatatotalDay" parameterType="com.data.biz.domain.BizFanDatatotal">
+        update biz_fan_datatotal_day
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fanId != null ">fan_id = #{fanId},</if>
+            <if test="windSpeed != null ">wind_speed = #{windSpeed},</if>
+            <if test="rotateSpeed != null ">rotate_speed = #{rotateSpeed},</if>
+            <if test="powerGeneration != null ">power_generation = #{powerGeneration},</if>
+            <if test="power != null ">power = #{power},</if>
+            <if test="leftDriftNum != null ">left_drift_num = #{leftDriftNum},</if>
+            <if test="leftDriftAngle != null ">left_drift_angle = #{leftDriftAngle},</if>
+            <if test="rightDriftNum != null ">right_drift_num = #{rightDriftNum},</if>
+            <if test="rightDriftAngle != null ">right_drift_angle = #{rightDriftAngle},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizFanDatatotalDayById" parameterType="Long">
+        delete from biz_fan_datatotal_day where id = #{id}
+    </delete>
+
+    <delete id="deleteBizFanDatatotalDayByIds" parameterType="String">
+        delete from biz_fan_datatotal_day where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+	<select id="selectRunDataDTO" parameterType="long" resultMap="RunDataDTOMap">
+    SELECT AVG(rotate_speed) as rotate_speed,
+    AVG(wind_speed) as wind_speed,
+    SUM(power_generation) as power_generation
+    FROM biz_fan_datatotal_day
+	WHERE fan_id in (SELECT id FROM biz_fan WHERE power_plant_id = #{ppId})
+    </select>
+    
+    <select id="getRecentlyPower" resultMap="BizFanDatatotalDayResult">
+    	select sum(power) as power,create_time from biz_fan_datatotal_day
+    	where status = 1  GROUP BY create_time order by create_time desc limit 0,15
+    </select>
+
+
+	<select id="selectBatteryLeftBTO" parameterType="long" resultMap="BatteryLeftDTOMap">
+		SELECT SUM(power_generation) as power_generation_sum,create_time as createTime FROM biz_fan_datatotal_day
+		WHERE fan_id in (SELECT id FROM biz_fan WHERE power_plant_id = #{ppId})
+		GROUP BY create_time
+		ORDER BY create_time DESC LIMIT 0,8
+	</select>
+	
+	
+	
+	<select id="selectBatteryLeftBTONotLimit" parameterType="long" resultMap="BatteryLeftDTOMap">
+		SELECT SUM(power_generation) as power_generation_sum,create_time as createTime FROM biz_fan_datatotal_day
+		WHERE fan_id in (SELECT id FROM biz_fan WHERE power_plant_id = #{ppId})
+		GROUP BY create_time
+		ORDER BY create_time DESC
+	</select>
+    
+    
+    <select id="sumGeneratingCapacity" parameterType="long" resultType="int">
+     SELECT SUM(power_generation)
+     FROM biz_fan_datatotal_day
+     WHERE fan_id in (SELECT fan_id FROM biz_fan WHERE power_plant_id = #{ppId})
+    </select>
+    
+    
+    <select id="avgPowerCalculate" parameterType="long" resultMap="AvgPowerDTOMap">
+    SELECT 
+	daypower.avgpowerday as avgpowerday,
+	monthpower.avgpowermonth as avgpowermonth,
+	yearpower.avgpoweryear as avgpoweryear
+	FROM
+	(SELECT AVG(power) as avgpowerday FROM biz_fan_datatotal_day WHERE fan_id in (SELECT fan_id FROM biz_fan WHERE power_plant_id = #{ppId})) as daypower,
+	(SELECT AVG(power) as avgpowermonth FROM biz_fan_datatotal_month WHERE fan_id in (SELECT fan_id FROM biz_fan WHERE power_plant_id = #{ppId})) as monthpower,
+	(SELECT AVG(power) as avgpoweryear FROM biz_fan_datatotal_year WHERE fan_id in (SELECT fan_id FROM biz_fan WHERE power_plant_id = #{ppId})) as yearpower
+    </select>
+</mapper>

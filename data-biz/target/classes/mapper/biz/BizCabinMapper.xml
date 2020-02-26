@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizCabinMapper">
+    
+    <resultMap type="com.data.biz.domain.BizCabin" id="BizCabinResult">
+        <result property="id"    column="id"    />
+        <result property="fanId"    column="fan_id"    />
+        <result property="cabinT"    column="cabin_t"    />
+        <result property="cabinAngle"    column="cabin_angle"    />
+        <result property="oilT"    column="oil_t"    />
+        <result property="lowShaftT"    column="low_shaft_t"    />
+        <result property="highShaftT"    column="high_shaft_t"    />
+        <result property="oilPressure"    column="oil_pressure"    />
+        <result property="acVoltage"    column="ac_voltage"    />
+        <result property="fanOutput"    column="fan_output"    />
+        <result property="fanOutputFrequency"    column="fan_output_frequency"    />
+        <result property="fanFactor"    column="fan_factor"    />
+        <result property="instantaneousPower"    column="instantaneous_power"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBizCabinVo">
+        select id, fan_id, cabin_t, cabin_angle, oil_t, low_shaft_t, high_shaft_t, oil_pressure, ac_voltage, fan_output, fan_output_frequency, fan_factor, instantaneous_power, status, create_time from biz_cabin
+    </sql>
+
+    <select id="selectBizCabinList" parameterType="BizCabin" resultMap="BizCabinResult">
+        <include refid="selectBizCabinVo"/>
+        <where>  
+            <if test="fanId != null "> and fan_id = #{fanId}</if>
+            <if test="cabinT != null "> and cabin_t = #{cabinT}</if>
+            <if test="cabinAngle != null "> and cabin_angle = #{cabinAngle}</if>
+            <if test="oilT != null "> and oil_t = #{oilT}</if>
+            <if test="lowShaftT != null "> and low_shaft_t = #{lowShaftT}</if>
+            <if test="highShaftT != null "> and high_shaft_t = #{highShaftT}</if>
+            <if test="oilPressure != null "> and oil_pressure = #{oilPressure}</if>
+            <if test="acVoltage != null "> and ac_voltage = #{acVoltage}</if>
+            <if test="fanOutput != null "> and fan_output = #{fanOutput}</if>
+            <if test="fanOutputFrequency != null "> and fan_output_frequency = #{fanOutputFrequency}</if>
+            <if test="fanFactor != null "> and fan_factor = #{fanFactor}</if>
+            <if test="instantaneousPower != null "> and instantaneous_power = #{instantaneousPower}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizCabinById" parameterType="long" resultMap="BizCabinResult">
+        <include refid="selectBizCabinVo"/>
+        where id = #{id}
+    </select>
+    
+    <select id="selectBizCabinByFanId" parameterType="string" resultMap="BizCabinResult">
+        select id, fan_id, cabin_t, cabin_angle, oil_t, low_shaft_t,
+        high_shaft_t, oil_pressure, ac_voltage, fan_output, fan_output_frequency,
+        fan_factor, instantaneous_power, status, create_time from biz_cabin
+        where fan_id = 1 order by create_time desc limit 0,1
+    </select>
+        
+    <insert id="insertBizCabin" parameterType="BizCabin">
+        insert into biz_cabin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="fanId != null ">fan_id,</if>
+            <if test="cabinT != null ">cabin_t,</if>
+            <if test="cabinAngle != null ">cabin_angle,</if>
+            <if test="oilT != null ">oil_t,</if>
+            <if test="lowShaftT != null ">low_shaft_t,</if>
+            <if test="highShaftT != null ">high_shaft_t,</if>
+            <if test="oilPressure != null ">oil_pressure,</if>
+            <if test="acVoltage != null ">ac_voltage,</if>
+            <if test="fanOutput != null ">fan_output,</if>
+            <if test="fanOutputFrequency != null ">fan_output_frequency,</if>
+            <if test="fanFactor != null ">fan_factor,</if>
+            <if test="instantaneousPower != null ">instantaneous_power,</if>
+            <if test="status != null ">status,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="fanId != null ">#{fanId},</if>
+            <if test="cabinT != null ">#{cabinT},</if>
+            <if test="cabinAngle != null ">#{cabinAngle},</if>
+            <if test="oilT != null ">#{oilT},</if>
+            <if test="lowShaftT != null ">#{lowShaftT},</if>
+            <if test="highShaftT != null ">#{highShaftT},</if>
+            <if test="oilPressure != null ">#{oilPressure},</if>
+            <if test="acVoltage != null ">#{acVoltage},</if>
+            <if test="fanOutput != null ">#{fanOutput},</if>
+            <if test="fanOutputFrequency != null ">#{fanOutputFrequency},</if>
+            <if test="fanFactor != null ">#{fanFactor},</if>
+            <if test="instantaneousPower != null ">#{instantaneousPower},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizCabin" parameterType="BizCabin">
+        update biz_cabin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fanId != null ">fan_id = #{fanId},</if>
+            <if test="cabinT != null ">cabin_t = #{cabinT},</if>
+            <if test="cabinAngle != null ">cabin_angle = #{cabinAngle},</if>
+            <if test="oilT != null ">oil_t = #{oilT},</if>
+            <if test="lowShaftT != null ">low_shaft_t = #{lowShaftT},</if>
+            <if test="highShaftT != null ">high_shaft_t = #{highShaftT},</if>
+            <if test="oilPressure != null ">oil_pressure = #{oilPressure},</if>
+            <if test="acVoltage != null ">ac_voltage = #{acVoltage},</if>
+            <if test="fanOutput != null ">fan_output = #{fanOutput},</if>
+            <if test="fanOutputFrequency != null ">fan_output_frequency = #{fanOutputFrequency},</if>
+            <if test="fanFactor != null ">fan_factor = #{fanFactor},</if>
+            <if test="instantaneousPower != null ">instantaneous_power = #{instantaneousPower},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizCabinById" parameterType="Long">
+        delete from biz_cabin where id = #{id}
+    </delete>
+
+    <delete id="deleteBizCabinByIds" parameterType="String">
+        delete from biz_cabin where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

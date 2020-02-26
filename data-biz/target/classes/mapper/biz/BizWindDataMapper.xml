@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizWindDataMapper">
+    <resultMap type="BizWindData" id="BizWindDataResult">
+        <result property="id"    column="id"    />
+        <result property="eastTime"    column="east_time"    />
+        <result property="westTime"    column="west_time"    />
+        <result property="southTime"    column="south_time"    />
+        <result property="northTime"    column="north_time"    />
+        <result property="neTime"    column="ne_time"    />
+        <result property="nneTime"    column="nne_time"    />
+        <result property="eneTime"    column="ene_time"    />
+        <result property="nwTime"    column="nw_time"    />
+        <result property="nnwTime"    column="nnw_time"    />
+        <result property="wnwTime"    column="wnw_time"    />
+        <result property="seTime"    column="se_time"    />
+        <result property="sseTime"    column="sse_time"    />
+        <result property="eseTime"    column="ese_time"    />
+        <result property="swTime"    column="sw_time"    />
+        <result property="sswTime"    column="ssw_time"    />
+        <result property="wswTime"    column="wsw_time"    />
+        <result property="interval"    column="interval"    />
+        <result property="type"    column="type"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBizWindDataVo">
+        select id, east_time, west_time, south_time, north_time, ne_time, nne_time, ene_time, nw_time, nnw_time, wnw_time, se_time, sse_time, ese_time, sw_time, ssw_time, wsw_time, `interval`, type, status, create_time from biz_wind_data
+    </sql>
+
+    <select id="selectBizWindDataList" parameterType="BizWindData" resultMap="BizWindDataResult">
+        <include refid="selectBizWindDataVo"/>
+        where create_time=#{createTime} and type=1 group by `interval` order by `interval` asc ;
+    </select>
+    <select id="selectBizWindDataListMonth" parameterType="BizWindData" resultMap="BizWindDataResult">
+        <include refid="selectBizWindDataVo"/>
+        where create_time like #{createTime} and type=2 group by `interval` order by `interval` asc ;
+    </select>
+    <select id="selectBizWindDataListYear" parameterType="BizWindData" resultMap="BizWindDataResult">
+        <include refid="selectBizWindDataVo"/>
+        where create_time like #{createTime} and type=3 group by `interval` order by `interval` asc ;
+    </select>
+    
+    <select id="selectBizWindDataById" parameterType="Long" resultMap="BizWindDataResult">
+        <include refid="selectBizWindDataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizWindData" parameterType="BizWindData" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_wind_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eastTime != null ">east_time,</if>
+            <if test="westTime != null ">west_time,</if>
+            <if test="southTime != null ">south_time,</if>
+            <if test="northTime != null ">north_time,</if>
+            <if test="neTime != null ">ne_time,</if>
+            <if test="nneTime != null ">nne_time,</if>
+            <if test="eneTime != null ">ene_time,</if>
+            <if test="nwTime != null ">nw_time,</if>
+            <if test="nnwTime != null ">nnw_time,</if>
+            <if test="wnwTime != null ">wnw_time,</if>
+            <if test="seTime != null ">se_time,</if>
+            <if test="sseTime != null ">sse_time,</if>
+            <if test="eseTime != null ">ese_time,</if>
+            <if test="swTime != null ">sw_time,</if>
+            <if test="sswTime != null ">ssw_time,</if>
+            <if test="wswTime != null ">wsw_time,</if>
+            <if test="interval != null ">`interval`,</if>
+            <if test="type != null ">type,</if>
+            <if test="status != null ">status,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="eastTime != null ">#{eastTime},</if>
+            <if test="westTime != null ">#{westTime},</if>
+            <if test="southTime != null ">#{southTime},</if>
+            <if test="northTime != null ">#{northTime},</if>
+            <if test="neTime != null ">#{neTime},</if>
+            <if test="nneTime != null ">#{nneTime},</if>
+            <if test="eneTime != null ">#{eneTime},</if>
+            <if test="nwTime != null ">#{nwTime},</if>
+            <if test="nnwTime != null ">#{nnwTime},</if>
+            <if test="wnwTime != null ">#{wnwTime},</if>
+            <if test="seTime != null ">#{seTime},</if>
+            <if test="sseTime != null ">#{sseTime},</if>
+            <if test="eseTime != null ">#{eseTime},</if>
+            <if test="swTime != null ">#{swTime},</if>
+            <if test="sswTime != null ">#{sswTime},</if>
+            <if test="wswTime != null ">#{wswTime},</if>
+            <if test="interval != null ">#{interval},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizWindData" parameterType="BizWindData">
+        update biz_wind_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="eastTime != null ">east_time = #{eastTime},</if>
+            <if test="westTime != null ">west_time = #{westTime},</if>
+            <if test="southTime != null ">south_time = #{southTime},</if>
+            <if test="northTime != null ">north_time = #{northTime},</if>
+            <if test="neTime != null ">ne_time = #{neTime},</if>
+            <if test="nneTime != null ">nne_time = #{nneTime},</if>
+            <if test="eneTime != null ">ene_time = #{eneTime},</if>
+            <if test="nwTime != null ">nw_time = #{nwTime},</if>
+            <if test="nnwTime != null ">nnw_time = #{nnwTime},</if>
+            <if test="wnwTime != null ">wnw_time = #{wnwTime},</if>
+            <if test="seTime != null ">se_time = #{seTime},</if>
+            <if test="sseTime != null ">sse_time = #{sseTime},</if>
+            <if test="eseTime != null ">ese_time = #{eseTime},</if>
+            <if test="swTime != null ">sw_time = #{swTime},</if>
+            <if test="sswTime != null ">ssw_time = #{sswTime},</if>
+            <if test="wswTime != null ">wsw_time = #{wswTime},</if>
+            <if test="interval != null ">interval = #{interval},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizWindDataById" parameterType="Long">
+        delete from biz_wind_data where id = #{id}
+    </delete>
+
+    <delete id="deleteBizWindDataByIds" parameterType="String">
+        delete from biz_wind_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

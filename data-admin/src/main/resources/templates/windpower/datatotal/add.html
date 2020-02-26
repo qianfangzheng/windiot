@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增风速统计')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-datatotal-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">东风次数：</label>
+                <div class="col-sm-8">
+                    <input name="eastNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">东风均速：</label>
+                <div class="col-sm-8">
+                    <input name="eastSpeed" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">西风次数：</label>
+                <div class="col-sm-8">
+                    <input name="westNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">西风均速：</label>
+                <div class="col-sm-8">
+                    <input name="westSpeed" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">南风次数：</label>
+                <div class="col-sm-8">
+                    <input name="southNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">南风均速：</label>
+                <div class="col-sm-8">
+                    <input name="southSpeed" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">北风次数：</label>
+                <div class="col-sm-8">
+                    <input name="northNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">北风均速：</label>
+                <div class="col-sm-8">
+                    <input name="northSpeed" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">东北风次数：</label>
+                <div class="col-sm-8">
+                    <input name="northeastNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">东北风均速：</label>
+                <div class="col-sm-8">
+                    <input name="northeastSpeed" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">西北风次数：</label>
+                <div class="col-sm-8">
+                    <input name="northwestNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">西北风均速：</label>
+                <div class="col-sm-8">
+                    <input name="northwestSpeed" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">东南风次数：</label>
+                <div class="col-sm-8">
+                    <input name="southeastNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">东南风均速：</label>
+                <div class="col-sm-8">
+                    <input name="southeastSpeed" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">西南风次数：</label>
+                <div class="col-sm-8">
+                    <input name="southwestNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">西南风均速：</label>
+                <div class="col-sm-8">
+                    <input name="southwestSpeed" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">类型 1日 2 月 3年：</label>
+                <div class="col-sm-8">
+                    <select name="type" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态 0无效 1有效：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="status" value="">
+                        <label th:for="status" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/datatotal"
+        $("#form-datatotal-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-datatotal-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

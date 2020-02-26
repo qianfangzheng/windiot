@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<title>功率统计</title>
+	<script src="/js/jquery-2.0.0.min.js" type="text/javascript" charset="utf-8"></script>
+	<th:block th:include="include :: header('百度ECharts')" />
+    <script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+    <style type="text/css">
+	</style>
+</head>
+	<body>
+    <body  class="gray-bg">
+	<th:block th:include="include :: datatotal" />
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>近七天功率统计(每个功率区间所持续时间在当日占比)</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="dayPower" class="echarts"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>近一年功率统计每个功率区间所持续时间在当月占比)</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="monthPower" class="echarts"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>近五年功率统计(每个功率区间所持续时间在当年占比)</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="echarts" id="yearPower"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+		<script th:inline="javascript">	 
+		var dayDate = [];// 存放最近七天的日期
+		var monthDate = [];// 存放最近12个月的日期
+		var yearDate = [];// 存放最近5年的日期
+		
+		var dayDataSection1 = [];// 存放最近七日功率的数据(区间1->0~50的数据)
+		var dayDataSection2 = [];// 存放最近七日功率的数据(区间2->50~100的数据)
+		var dayDataSection3 = [];// 存放最近七日功率的数据(区间3->100~150的数据)
+		var dayDataSection4 = [];// 存放最近七日功率的数据(区间4->150~200的数据)
+		
+		var monthDataSection1 = [];// 存放最近12个月的功率数据(区间1->0~50的数据)
+		var monthDataSection2 = [];// 存放最近12个月的功率数据(区间2->50~100的数据)
+		var monthDataSection3 = [];// 存放最近12个月的功率数据(区间3->100~150的数据)
+		var monthDataSection4 = [];// 存放最近12个月的功率数据(区间4->150~200的数据)
+		
+		var yearDataSection1 = [];// 存放最近五年的功率数据(区间1->0~50的数据)
+		var yearDataSection2 = [];// 存放最近五年的功率数据(区间2->50~100的数据)
+		var yearDataSection3 = [];// 存放最近五年的功率数据(区间3->100~150的数据)
+		var yearDataSection4 = [];// 存放最近五年的功率数据(区间4->150~200的数据)
+
+		// 获取七天日期
+			$.ajax({
+				url:"powerstatistics/recentlyDate",
+				Type:"post",
+				data:{
+					datatype:1
+				},
+				dataType:"json",
+				async:false,
+				success:function(data){
+					for(var i=0;i<data.length;i++){
+						dayDate.unshift(data[i].substring(0,10));
+					}
+				},
+			})
+			// 获取最近12个月日期
+			$.ajax({
+				url:"powerstatistics/recentlyDate",
+				Type:"post",
+				dataType:"json",
+				data:{
+					datatype:2
+				},
+				async:false,
+				success:function(data){
+					for(var i=0;i<data.length;i++){
+						monthDate.unshift(data[i].substring(0,10));
+					}
+				},
+			})
+			// 获取五年日期
+			$.ajax({
+				url:"powerstatistics/recentlyDate",
+				Type:"post",
+				dataType:"json",
+				data:{
+					datatype:3
+				},
+				async:false,
+				success:function(data){
+					for(var i=0;i<data.length;i++){
+						yearDate.unshift(data[i].substring(0,10));
+					}
+				},
+			})
+			// 获取最近七日的数据
+			$.ajax({
+				url:"powerstatistics/listPowerDataDay",
+				Type:"post",
+				dataType:"json",
+				async:false,
+				success:function(data){
+					for(var i=0;i<data.length;i++){
+						if(data[i].section == 1){
+							dayDataSection1.unshift(data[i].ratio);
+						}else if(data[i].section == 2){
+							dayDataSection2.unshift(data[i].ratio);
+						}else if(data[i].section == 3){
+							dayDataSection3.unshift(data[i].ratio);
+						}else if(data[i].section == 4){
+							dayDataSection4.unshift(data[i].ratio);
+						}
+					}
+				},
+			})
+			// 获取最近12个月的数据
+			$.ajax({
+				url:"powerstatistics/listPowerDataMonth",
+				Type:"post",
+				dataType:"json",
+				async:false,
+				success:function(data){
+					for(var i=0;i<data.length;i++){
+						if(data[i].section == 1){
+							monthDataSection1.unshift(data[i].ratio);
+						}else if(data[i].section == 2){
+							monthDataSection2.unshift(data[i].ratio);
+						}else if(data[i].section == 3){
+							monthDataSection3.unshift(data[i].ratio);
+						}else if(data[i].section == 4){
+							monthDataSection4.unshift(data[i].ratio);
+						}
+					}
+				},
+			})
+			// 获取最近五年的数据
+			$.ajax({
+				url:"powerstatistics/listPowerDataYear",
+				Type:"post",
+				dataType:"json",
+				async:false,
+				success:function(data){
+					for(var i=0;i<data.length;i++){
+						if(data[i].section == 1){
+							yearDataSection1.unshift(data[i].ratio);
+						}else if(data[i].section == 2){
+							yearDataSection2.unshift(data[i].ratio);
+						}else if(data[i].section == 3){
+							yearDataSection3.unshift(data[i].ratio);
+						}else if(data[i].section == 4){
+							yearDataSection4.unshift(data[i].ratio);
+						}
+					}
+				},
+			})
+		 	// 日功率统计线性图
+		    // 基于准备好的dom，初始化echarts实例
+		    var myChartDay = echarts.init(document.getElementById('dayPower'));
+			// 月功率统计线性图
+			// 基于准备好的dom，初始化echarts实例
+			var myChartMonth = echarts.init(document.getElementById('monthPower'));
+			// 年功率统计线性图
+			// 基于准备好的dom，初始化echarts实例
+			var myChartYear = echarts.init(document.getElementById('yearPower'));
+					
+			var optionDay={
+				    tooltip: {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        color: ["#F58080", "#47D8BE", "#F9A589","red"],
+				        data: ['0~50', '50~100', '100~150','150~200'],
+				        left: 'center',
+				        bottom: 'bottom'
+				    },
+				    grid: {
+				        top: 'middle',
+				        left: '3%',
+				        right: '4%',
+				        bottom: '3%',
+				        height: '80%',
+				        containLabel: true
+				    },
+				    xAxis: {
+				        type: 'category',
+				        data: dayDate,
+				        axisLine: {
+				            lineStyle: {
+				                color: "#999"
+				            }
+				        }
+				    },
+				    yAxis: {
+				        type: 'value',
+
+				        splitLine: {
+				            lineStyle: {
+				                type: 'dashed',
+				                color: '#DDD'
+				            }
+				        },
+				        axisLine: {
+				            show: false,
+				            lineStyle: {
+				                color: "#333"
+				            },
+				        },
+				        nameTextStyle: {
+				            color: "#999"
+				        },
+				        splitArea: {
+				            show: false
+				        }
+				    },
+				    series: [{
+				            name: '0~50',
+				            type: 'line',
+				            data: dayDataSection1,
+				            color: "#F58080",
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                            offset: 0,
+				                            color: '#FFCAD4' // 0% 处的颜色
+				                        }, {
+				                            offset: 0.4,
+				                            color: '#F58080' // 100% 处的颜色
+				                        }, {
+				                            offset: 1,
+				                            color: '#F58080' // 100% 处的颜色
+				                        }],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(245,128,128, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#F58080',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#F58080"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '50~100',
+				            type: 'line',
+				            data: dayDataSection2,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#AAF487' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#47D8BE' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#47D8BE' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(71,216,190, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#AAF487',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#AAF487"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '100~150',
+				            type: 'line',
+				            data: dayDataSection3,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#F6D06F' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#F9A589' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#F9A589' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(249,165,137, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#F6D06F',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#F6D06F"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '150~200',
+				            type: 'line',
+				            data: dayDataSection4,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#66CCFF' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#66CCFF' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#66CCFF' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(249,165,137, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#66CCFF',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#66CCFF"
+				                }
+				            },
+				            smooth: true
+				        }
+				    ]
+				};	
+			var optionMonth={
+				    tooltip: {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        color: ["#F58080", "#47D8BE", "#F9A589","red"],
+				        data: ['0~50', '50~100', '100~150','150~200'],
+				        left: 'center',
+				        bottom: 'bottom'
+				    },
+				    grid: {
+				        top: 'middle',
+				        left: '3%',
+				        right: '4%',
+				        bottom: '3%',
+				        height: '80%',
+				        containLabel: true
+				    },
+				    xAxis: {
+				        type: 'category',
+				        data: monthDate,
+				        axisLine: {
+				            lineStyle: {
+				                color: "#999"
+				            }
+				        }
+				    },
+				    yAxis: {
+				        type: 'value',
+
+				        splitLine: {
+				            lineStyle: {
+				                type: 'dashed',
+				                color: '#DDD'
+				            }
+				        },
+				        axisLine: {
+				            show: false,
+				            lineStyle: {
+				                color: "#333"
+				            },
+				        },
+				        nameTextStyle: {
+				            color: "#999"
+				        },
+				        splitArea: {
+				            show: false
+				        }
+				    },
+				    series: [{
+				            name: '0~50',
+				            type: 'line',
+				            data: monthDataSection1,
+				            color: "#F58080",
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                            offset: 0,
+				                            color: '#FFCAD4' // 0% 处的颜色
+				                        }, {
+				                            offset: 0.4,
+				                            color: '#F58080' // 100% 处的颜色
+				                        }, {
+				                            offset: 1,
+				                            color: '#F58080' // 100% 处的颜色
+				                        }],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(245,128,128, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#F58080',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#F58080"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '50~100',
+				            type: 'line',
+				            data: monthDataSection2,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#AAF487' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#47D8BE' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#47D8BE' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(71,216,190, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#AAF487',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#AAF487"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '100~150',
+				            type: 'line',
+				            data: monthDataSection3,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#F6D06F' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#F9A589' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#F9A589' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(249,165,137, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#F6D06F',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#F6D06F"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '150~200',
+				            type: 'line',
+				            data: monthDataSection4,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#66CCFF' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#66CCFF' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#66CCFF' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(249,165,137, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#66CCFF',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#66CCFF"
+				                }
+				            },
+				            smooth: true
+				        }
+				    ]
+				};		
+			var optionYear={
+				    tooltip: {
+				        trigger: 'axis'
+				    },
+				    legend: {
+				        color: ["#F58080", "#47D8BE", "#F9A589","red"],
+				        data: ['0~50', '50~100', '100~150','150~200'],
+				        left: 'center',
+				        bottom: 'bottom'
+				    },
+				    grid: {
+				        top: 'middle',
+				        left: '3%',
+				        right: '4%',
+				        bottom: '3%',
+				        height: '80%',
+				        containLabel: true
+				    },
+				    xAxis: {
+				        type: 'category',
+				        data: yearDate,
+				        axisLine: {
+				            lineStyle: {
+				                color: "#999"
+				            }
+				        }
+				    },
+				    yAxis: {
+				        type: 'value',
+
+				        splitLine: {
+				            lineStyle: {
+				                type: 'dashed',
+				                color: '#DDD'
+				            }
+				        },
+				        axisLine: {
+				            show: false,
+				            lineStyle: {
+				                color: "#333"
+				            },
+				        },
+				        nameTextStyle: {
+				            color: "#999"
+				        },
+				        splitArea: {
+				            show: false
+				        }
+				    },
+				    series: [{
+				            name: '0~50',
+				            type: 'line',
+				            data: yearDataSection1,
+				            color: "#F58080",
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                            offset: 0,
+				                            color: '#FFCAD4' // 0% 处的颜色
+				                        }, {
+				                            offset: 0.4,
+				                            color: '#F58080' // 100% 处的颜色
+				                        }, {
+				                            offset: 1,
+				                            color: '#F58080' // 100% 处的颜色
+				                        }],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(245,128,128, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#F58080',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#F58080"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '50~100',
+				            type: 'line',
+				            data: yearDataSection2,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#AAF487' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#47D8BE' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#47D8BE' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(71,216,190, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#AAF487',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#AAF487"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '100~150',
+				            type: 'line',
+				            data: yearDataSection3,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#F6D06F' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#F9A589' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#F9A589' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(249,165,137, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#F6D06F',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#F6D06F"
+				                }
+				            },
+				            smooth: true
+				        },
+				        {
+				            name: '150~200',
+				            type: 'line',
+				            data: yearDataSection4,
+				            lineStyle: {
+				                normal: {
+				                    width: 2,
+				                    color: {
+				                        type: 'linear',
+
+				                        colorStops: [{
+				                                offset: 0,
+				                                color: '#66CCFF' // 0% 处的颜色
+				                            },
+				                            {
+				                                offset: 0.4,
+				                                color: '#66CCFF' // 100% 处的颜色
+				                            }, {
+				                                offset: 1,
+				                                color: '#66CCFF' // 100% 处的颜色
+				                            }
+				                        ],
+				                        globalCoord: false // 缺省为 false
+				                    },
+				                    shadowColor: 'rgba(249,165,137, 0.5)',
+				                    shadowBlur: 10,
+				                    shadowOffsetY: 7
+				                }
+				            },
+				            itemStyle: {
+				                normal: {
+				                    color: '#66CCFF',
+				                    borderWidth: 10,
+				                    /*shadowColor: 'rgba(72,216,191, 0.3)',
+				                     shadowBlur: 100,*/
+				                    borderColor: "#66CCFF"
+				                }
+				            },
+				            smooth: true
+				        }
+				    ]
+				};		
+			// 使用刚指定的配置项和数据显示图表。
+		    myChartDay.setOption(optionDay);
+			myChartMonth.setOption(optionMonth);
+			myChartYear.setOption(optionYear);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>若依介绍</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg">
+    <div class="row  border-bottom white-bg dashboard-header">
+        <div class="col-sm-12">
+            <blockquote class="" style="font-size:14px">
+                                           此项目为模拟风电场监控项目，模拟一个电厂、十五台风机，数据采用随机数实时插入到时序数据库中，再由websocket+quartz从时序数据库中取出推送到界面展示。其中统计信息存放在关系型数据库中。
+                
+                <h4 class="">采用TrendDB时序数据库进行模拟数据，技术支持：17725354261</h4>
+            </blockquote>
+
+            <hr>
+        </div>
+        <div class="col-sm-4">
+            <h2 class="label label-warning">TrendDB简介：</h2>
+            <br><br>
+            <p>TrendDB通过对实时数据采集和应用，支撑企业构建厂级监控系统、制造执行系统、能源管理系统等等，广泛应用于电力、石化、冶金、煤矿、装备、交通、环境等领域，是智慧工厂、智慧城市大数据的核心之一。</p>
+
+<p>通过联接工业传感网，建立实时数据中心，打造企业大数据平台；</p>
+
+<p>通过生产实时数据，建立设备实时监视平台，为企业安全生产保驾护航；</p>
+
+<p>通过对实时数据进行大数据分析，为企业辅助决策提供数据支撑；</p>
+
+<p>通过实时数据库提供的可视化开发工具，帮助快速搭建应用。</p>
+        </div>
+        <div class="col-sm-4">
+            <h2 class="label label-warning">产品亮点</h2>
+            <br><br>
+            <ol>
+            	<li>自主知识产权，完全自主开发，保障信息安全</li>
+            	<li>跨平台运行，WINDOWS/LINUX/UNIX/… 
+            	</li>
+            	<li>分布式体系架构， 支持性能和容量平滑升级
+            	</li>
+            	<li>混合压缩技术，有损压缩/无损压缩，更高压缩比
+            	</li>
+            	<li>高效处理能力，性能达到同类产品十倍以上
+            	</li>
+            	<li>多节点冗余与复制，支持网络隔离装置穿越
+            	</li>
+            	<li>客户端缓存技术，轻松应对网络意外中断等
+            	</li>
+            	<li>客户端缓存技术，轻松应对网络意外中断等
+            	</li>
+            	<li>二次开发支持，C++、JAVA、多连接/多线程访问
+            	</li>
+            	<li>SQL支持，支持JDBC、ODBC等访问
+            	</li>
+            	<li>通讯规约支持，OPC/Modbus/IEC/UDP……
+            	</li>
+            	<li>64位操作系统，更优系统性能和执行效率
+            	</li>
+            </ol>
+            
+        </div>
+        <div class="col-sm-4">
+            <h2 class="label label-warning">产品性能：</h2>
+            <br><br>
+            <ol>
+                <li>批量数据写入能力：1200万事件/秒（实测值） 
+				</li>
+                <li>逐点数据写入能力：100万事件/秒（实测值）
+				</li>
+                <li>数据访问能力：100万事件/秒（实测值）
+				</li>
+                <li>无损压缩：3~5倍
+				</li>
+				<li>有损压缩：螺旋门压缩：10倍
+				</li>
+				<li>综合压缩：30~50倍
+				</li>
+				<li>并发访问数量：>1024
+				</li>
+				<li>支持网络负载均衡
+				</li>
+				<li>支持双机冗余备份
+				</li>
+				<li>支持客户端缓存
+				</li>
+				<li>时间精度：1微秒
+				</li>
+				<li>单实例标签容量：42亿
+				</li>
+            </ol>
+        </div>
+
+    </div>
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-8">
+				<div class="row">
+				<div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>TrendDB与美国PI（OSIsoft）和eDNA（Instep）当前主流实时数据库性能参数对比，技术支持：17725354261</h5>
+
+                    </div>
+                    
+                    <div class="ibox-content">
+	                    <div class="row show-grid">
+	                    	<p style="color:blue">测试环境</p>
+                    		<p>服务器：Dell T620 CPU: Intel XEON E2609，2.4GHZ，4核双CPU 内存：32GB 硬盘：600GB 15000RPM + 2TB 7200RPM OS: Redhat Enterprise Server （64位） 配置150万测点 1Gbps网络</p>
+							<p>客户机：ThinkPad 220 CPU：I5-2520，2.5GHZ 内存：8GB 硬盘：320GB 5400RPM OS: Windows 7 （64位）配置TrendDB性能测试工具 1Gbps网络
+	                        <table class="table table-bordered table-hover">
+	                        	<thead>
+	                        		<tr>
+	                        			<th>性能指标</th>
+	                        			<th>TrendDB</th>
+	                        			<th>P I</th>
+	                        			<th> eDNA</th>
+	                        		</tr>
+	                        	</thead>
+	                        	<tbody>
+	                        		<tr>
+	                        			<th>批量数据写入能力</th>
+	                        			<td class="text-danger">1200万事件/秒（实测）</td>
+	                        			<td>400万事件/秒（宣称）</td>
+	                        			<td>100万事件/秒（宣称）</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>逐点数据写入能力</th>
+	                        			<td class="text-danger">100万事件/秒（实测）</td>
+	                        			<td>50万事件/秒（宣称）</td>
+	                        			<td>20万事件/秒（宣称）</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>数据访问能力</th>
+	                        			<td>100万事件/秒（实测）</td>
+	                        			<td>40万事件/秒（宣称）</td>
+	                        			<td>40万事件/秒（宣称）</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>无损数据压缩率</th>
+	                        			<td class="text-danger">3~5 倍（实测）</td>
+	                        			<td>不支持</td>
+	                        			<td>5倍</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>有损压缩</th>
+	                        			<td>旋转门压缩</td>
+	                        			<td>旋转门压缩</td>
+	                        			<td>不支持</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>综合压缩率</th>
+	                        			<td class="text-danger">30~50倍</td>
+	                        			<td>10倍</td>
+	                        			<td>5倍</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>插入修改历史记录</th>
+	                        			<td>支持，接口与正常数据接口一直</td>
+	                        			<td>支持，单独的程序接口</td>
+	                        			<td>支持，单独的程序接口</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>客户端数据缓存</th>
+	                        			<td>支持</td>
+	                        			<td>支持</td>
+	                        			<td>支持</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>跨安全区数据映射</th>
+	                        			<td>支持</td>
+	                        			<td>部分支持</td>
+	                        			<td>支持</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>网络负载均衡与优化</th>
+	                        			<td class="text-danger">支持</td>
+	                        			<td>不支持</td>
+	                        			<td>不支持</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>实时最大最小值统计</th>
+	                        			<td class="text-danger">支持</td>
+	                        			<td>不支持</td>
+	                        			<td>不支持</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>网络穿透能力</th>
+	                        			<td>支持</td>
+	                        			<td>不支持</td>
+	                        			<td>支持</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>双机冗余备份机制</th>
+	                        			<td>冷备与热备</td>
+	                        			<td>群集冷备方式</td>
+	                        			<td>冷备与热备</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>单实例最大标签容量</th>
+	                        			<td class="text-danger">大于42亿</td>
+	                        			<td>400万</td>
+	                        			<td>100万（宣称无限点）</td>
+	                        		</tr>
+	                        		<tr>
+	                        			<th>时间精度</th>
+	                        			<td class="text-danger">1微秒</td>
+	                        			<td>15微秒</td>
+	                        			<td>1毫秒</td>
+	                        		</tr>
+	                        	</tbody>
+	                        </table>
+	                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-sm-12">
+                	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>产品应用</h5>
+                    </div>
+                    <div class="ibox-content no-padding">
+                        <div class="panel-body">
+                            <div class="panel-group" id="product">
+                            	<div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#product" href="#c01">1. 物联网、工业4.0</a>
+										</h5>
+                                    </div>
+                                    <div id="c01" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <img alt="" src="/img/gn/cp01.png" style="width:100%;">
+                                            <img alt="" src="/img/gn/cp02.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#product" href="#c02">2典型系统实施架构</a>
+										</h5>
+                                    </div>
+                                    <div id="c02" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <img alt="" src="/img/gn/cp03.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                               
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                	
+                	
+                </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>TrendDB功能</h5>
+                    </div>
+                    <div class="ibox-content no-padding">
+                        <div class="panel-body">
+                            <div class="panel-group" id="version">
+                            	<div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse " data-parent="#version" href="#v01">1. 标签双标识机制</a>
+										</h5>
+                                    </div>
+                                    <div id="v01" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <img alt="" src="/img/gn/gn01.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v02">2.标签自定义属性</a>
+										</h5>
+                                    </div>
+                                    <div id="v02" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <img alt="" src="/img/gn/gn02.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v03">3.标签多样化</a>
+										</h5>
+                                    </div>
+                                    <div id="v03" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                            	<li>连续标签：电压、电流、功率等表征连续变化过程的量测量
+                                            	</li>
+												<li>离散数据标签：开关状态、调节目标设置值等非连续变化的量测量</li>
+												<li>二进制数据标签：具有时序特征的非结构化数据，例如保护装置的定值表，长距电缆的温度量测等，适当使用二进制数据标签可以大大节约标签空间</li>
+                                            </ul>
+                                            	<h4>标签类型：</h4>
+                                            	<div class="">
+                                            		<div class="">
+                                            			连续、离散标签
+                                            		</div>
+                                            		<div class="" style="background:#6d6d6d; color:#FFF">
+                                            			time
+                                            		</div>
+                                            		<div class="" style="background:#e1d05f; color:#FFF">
+                                            			value
+                                            		</div>
+                                            		<div class="" style="background:#43db5b; color:#FFF">
+                                            			status
+                                            		</div>
+                                            	</div>
+                                            	<div class="">
+                                            		<div class="">
+                                            			二进制标签
+                                            		</div>
+                                            		<div class="" style="background:#6d6d6d; color:#FFF">
+                                            			time
+                                            		</div>
+                                            		<div class="" style="background:#e1d05f; color:#FFF">
+                                            			BLOB（up to 96KB）
+                                            		</div>
+                                            	</div>
+                                            	<h4>数据处理：</h4>
+                                            	<div class="">
+                                            		<div class="">
+                                            			连续标签
+                                            		</div>
+                                            		<div class="" style="background:#4e76dd; color:#FFF">
+                                            			——>有损压缩
+                                            		</div>
+                                            		<div class="" style="background:#4e76dd; color:#FFF">
+                                            			——>无损压缩
+                                            		</div>
+                                            		<div class="" style="background:#4e76dd; color:#FFF">
+                                            			——>数据处理
+                                            		</div>
+                                            	</div>
+                                            	<div class="row-sm-12">
+                                            		<div class="">
+                                            			离散、二进制标签
+                                            		</div>
+                                            		<div class="" style="background:#4e76dd; color:#FFF">
+                                            			——>无损压缩
+                                            		</div>
+                                            		<div class="" style="background:#4e76dd; color:#FFF">
+                                            			——>数据处理
+                                            		</div>
+                                            	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v04">4.客户端压缩</a>
+										</h5>
+                                    </div>
+                                    <div id="v04" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                            	<li>有损压缩率：10：1</li>
+												<li>无损压缩率：3～5：1</li>
+												<li>综合压缩率30～50：1</li>
+                                            </ul>
+                                            <h4>压缩原理：</h4>
+                                            <img alt="" src="/img/gn/gn04.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v05">5.标签聚合服务</a>
+										</h5>
+                                    </div>
+                                    <div id="v05" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                            	<li>3 秒内</li>
+												<li>20万以上标签频繁读写</li>
+												<li>无扩展限制</li>
+												<li>聚合服务提供标准API</li>
+                                            </ul>
+                                            <h4>压缩原理：</h4>
+                                            <img alt="" src="/img/gn/gn03.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v06">6.备份</a>
+										</h5>
+                                    </div>
+                                    <div id="v06" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                            	<li>通过增加硬件配置来提高整个系统的可用性</li>
+												<li>减小每次数据备份的数据量，加快数据备份速度</li>
+                                            </ul>
+                                            <h4>双机冗余热备：</h4>
+                                            <img alt="" src="/img/gn/gn05.png" style="width:100%;">
+                                            <h4>在线增量备份：</h4>
+                                            <img alt="" src="/img/gn/gn06.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            	<div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v07">7.跨安全区数据映射</a>
+										</h5>
+                                    </div>
+                                    <div id="v07" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <h4>客户端网络隔离穿透：</h4>
+                                            <img alt="" src="/img/gn/gn07.png" style="width:100%;">
+                                            <h4>服务器网络隔离穿透：</h4>
+                                            <img alt="" src="/img/gn/gn08.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+								
+								<div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v08">8.客户端数据缓存与重发</a>
+										</h5>
+                                    </div>
+                                    <div id="v08" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                            	<li>客户端及时写入数据</li>
+												<li>缓存异步校验并同步数据</li>
+												<li>同步数据自动持行</li>
+                                            </ul>
+                                            <img alt="" src="/img/gn/gn09.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v09">9.系统崩溃恢复能力</a>
+										</h5>
+                                    </div>
+                                    <div id="v09" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                            	<li>完整的数据对比校验</li>
+												<li>数据库自动恢复机制</li>
+												<li>最大程度回复数据</li>
+                                            </ul>
+                                            <img alt="" src="/img/gn/gn10.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v10">10.脚本语言</a>
+										</h5>
+                                    </div>
+                                    <div id="v10" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                            	<li>Javascript服务端计算引擎</li>
+												<li>语法简单，执行高效</li>
+												<li>定时自动执行</li>
+                                            </ul>
+                                            <img alt="" src="/img/gn/gn11.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v11">11.脚本语言</a>
+										</h5>
+                                    </div>
+                                    <div id="v11" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                            	<li>支持SQL语句查询</li>
+												<li>支持SQL语句查询</li>
+												<li>支持SQL语句查询</li>
+												<li>标签定义导入、导出</li>
+                                            </ul>
+                                            <img alt="" src="/img/gn/gn12.png" style="width:100%;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+									<div class="panel-heading">
+                                        <h5 class="panel-title">
+											<a data-toggle="collapse" data-parent="#version" href="#v12">12.更多···</a>
+										</h5>
+                                    </div>
+                                    <div id="v12" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            	<p>更多功能详情如需了解请加Q群:826927997<p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
+    <script type="text/javascript">
+	    $('#pay-qrcode').click(function(){
+	        var html=$(this).html();
+	        parent.layer.open({
+	            title: false,
+	            type: 1,
+	            closeBtn:false,
+	            shadeClose:true,
+	            area: ['600px', 'auto'],
+	            content: html
+	        });
+	    });
+    </script>
+</body>
+</html>
+

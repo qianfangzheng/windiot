@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizWindDatatotalMapper">
+    
+    <resultMap type="BizWindDatatotal" id="BizWindDatatotalResult">
+        <result property="id"    column="id"    />
+        <result property="eastNum"    column="east_num"    />
+        <result property="eastSpeed"    column="east_speed"    />
+        <result property="westNum"    column="west_num"    />
+        <result property="westSpeed"    column="west_speed"    />
+        <result property="southNum"    column="south_num"    />
+        <result property="southSpeed"    column="south_speed"    />
+        <result property="northNum"    column="north_num"    />
+        <result property="northSpeed"    column="north_speed"    />
+        <result property="northeastNum"    column="northeast_num"    />
+        <result property="northeastSpeed"    column="northeast_speed"    />
+        <result property="northwestNum"    column="northwest_num"    />
+        <result property="northwestSpeed"    column="northwest_speed"    />
+        <result property="southeastNum"    column="southeast_num"    />
+        <result property="southeastSpeed"    column="southeast_speed"    />
+        <result property="southwestNum"    column="southwest_num"    />
+        <result property="southwestSpeed"    column="southwest_speed"    />
+        <result property="nneSpeed"    column="nne_speed"    />
+        <result property="nneNum"    column="nne_num"    />
+        <result property="eneSpeed"    column="ene_speed"    />
+        <result property="eneNum"    column="ene_num"    />
+        <result property="sseSpeed"    column="sse_speed"    />
+        <result property="sseNum"    column="sse_num"    />
+        <result property="eseSpeed"    column="ese_speed"    />
+        <result property="eseNum"    column="ese_num"    />
+        <result property="sswSpeed"    column="ssw_speed"    />
+        <result property="sswNum"    column="ssw_num"    />
+        <result property="wswSpeed"    column="wsw_speed"    />
+        <result property="wswNum"    column="wsw_num"    />
+        <result property="nnwSpeed"    column="nnw_speed"    />
+        <result property="nnwNum"    column="nnw_num"    />
+        <result property="wnwSpeed"    column="wnw_speed"    />
+        <result property="wnwNum"    column="wnw_num"    />
+        <result property="status"    column="status"    />
+        <result property="type"    column="type"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBizWindDatatotalVo">
+        select id, east_num, east_speed, west_num, west_speed, south_num, south_speed, north_num, north_speed, northeast_num, northeast_speed, northwest_num, northwest_speed, southeast_num, southeast_speed, southwest_num, southwest_speed, nne_speed, nne_num, ene_speed, ene_num, sse_speed, sse_num, ese_speed, ese_num, ssw_speed, ssw_num, wsw_speed, wsw_num, nnw_speed, nnw_num, wnw_speed, wnw_num, status, type, create_time from biz_wind_datatotal
+    </sql>
+
+    <select id="selectBizWindDatatotalList" parameterType="BizWindDatatotal" resultMap="BizWindDatatotalResult">
+        <include refid="selectBizWindDatatotalVo"/>
+        <where>  
+            <if test="eastNum != null "> and east_num = #{eastNum}</if>
+            <if test="eastSpeed != null "> and east_speed = #{eastSpeed}</if>
+            <if test="westNum != null "> and west_num = #{westNum}</if>
+            <if test="westSpeed != null "> and west_speed = #{westSpeed}</if>
+            <if test="southNum != null "> and south_num = #{southNum}</if>
+            <if test="southSpeed != null "> and south_speed = #{southSpeed}</if>
+            <if test="northNum != null "> and north_num = #{northNum}</if>
+            <if test="northSpeed != null "> and north_speed = #{northSpeed}</if>
+            <if test="northeastNum != null "> and northeast_num = #{northeastNum}</if>
+            <if test="northeastSpeed != null "> and northeast_speed = #{northeastSpeed}</if>
+            <if test="northwestNum != null "> and northwest_num = #{northwestNum}</if>
+            <if test="northwestSpeed != null "> and northwest_speed = #{northwestSpeed}</if>
+            <if test="southeastNum != null "> and southeast_num = #{southeastNum}</if>
+            <if test="southeastSpeed != null "> and southeast_speed = #{southeastSpeed}</if>
+            <if test="southwestNum != null "> and southwest_num = #{southwestNum}</if>
+            <if test="southwestSpeed != null "> and southwest_speed = #{southwestSpeed}</if>
+            <if test="nneSpeed != null "> and nne_speed = #{nneSpeed}</if>
+            <if test="nneNum != null "> and nne_num = #{nneNum}</if>
+            <if test="eneSpeed != null "> and ene_speed = #{eneSpeed}</if>
+            <if test="eneNum != null "> and ene_num = #{eneNum}</if>
+            <if test="sseSpeed != null "> and sse_speed = #{sseSpeed}</if>
+            <if test="sseNum != null "> and sse_num = #{sseNum}</if>
+            <if test="eseSpeed != null "> and ese_speed = #{eseSpeed}</if>
+            <if test="eseNum != null "> and ese_num = #{eseNum}</if>
+            <if test="sswSpeed != null "> and ssw_speed = #{sswSpeed}</if>
+            <if test="sswNum != null "> and ssw_num = #{sswNum}</if>
+            <if test="wswSpeed != null "> and wsw_speed = #{wswSpeed}</if>
+            <if test="wswNum != null "> and wsw_num = #{wswNum}</if>
+            <if test="nnwSpeed != null "> and nnw_speed = #{nnwSpeed}</if>
+            <if test="nnwNum != null "> and nnw_num = #{nnwNum}</if>
+            <if test="wnwSpeed != null "> and wnw_speed = #{wnwSpeed}</if>
+            <if test="wnwNum != null "> and wnw_num = #{wnwNum}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="type != null "> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizWindDatatotalById" parameterType="Long" resultMap="BizWindDatatotalResult">
+        <include refid="selectBizWindDatatotalVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizWindDatatotal" parameterType="BizWindDatatotal" useGeneratedKeys="true" keyProperty="id">
+        insert into biz_wind_datatotal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eastNum != null ">east_num,</if>
+            <if test="eastSpeed != null ">east_speed,</if>
+            <if test="westNum != null ">west_num,</if>
+            <if test="westSpeed != null ">west_speed,</if>
+            <if test="southNum != null ">south_num,</if>
+            <if test="southSpeed != null ">south_speed,</if>
+            <if test="northNum != null ">north_num,</if>
+            <if test="northSpeed != null ">north_speed,</if>
+            <if test="northeastNum != null ">northeast_num,</if>
+            <if test="northeastSpeed != null ">northeast_speed,</if>
+            <if test="northwestNum != null ">northwest_num,</if>
+            <if test="northwestSpeed != null ">northwest_speed,</if>
+            <if test="southeastNum != null ">southeast_num,</if>
+            <if test="southeastSpeed != null ">southeast_speed,</if>
+            <if test="southwestNum != null ">southwest_num,</if>
+            <if test="southwestSpeed != null ">southwest_speed,</if>
+            <if test="nneSpeed != null ">nne_speed,</if>
+            <if test="nneNum != null ">nne_num,</if>
+            <if test="eneSpeed != null ">ene_speed,</if>
+            <if test="eneNum != null ">ene_num,</if>
+            <if test="sseSpeed != null ">sse_speed,</if>
+            <if test="sseNum != null ">sse_num,</if>
+            <if test="eseSpeed != null ">ese_speed,</if>
+            <if test="eseNum != null ">ese_num,</if>
+            <if test="sswSpeed != null ">ssw_speed,</if>
+            <if test="sswNum != null ">ssw_num,</if>
+            <if test="wswSpeed != null ">wsw_speed,</if>
+            <if test="wswNum != null ">wsw_num,</if>
+            <if test="nnwSpeed != null ">nnw_speed,</if>
+            <if test="nnwNum != null ">nnw_num,</if>
+            <if test="wnwSpeed != null ">wnw_speed,</if>
+            <if test="wnwNum != null ">wnw_num,</if>
+            <if test="status != null ">status,</if>
+            <if test="type != null ">type,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="eastNum != null ">#{eastNum},</if>
+            <if test="eastSpeed != null ">#{eastSpeed},</if>
+            <if test="westNum != null ">#{westNum},</if>
+            <if test="westSpeed != null ">#{westSpeed},</if>
+            <if test="southNum != null ">#{southNum},</if>
+            <if test="southSpeed != null ">#{southSpeed},</if>
+            <if test="northNum != null ">#{northNum},</if>
+            <if test="northSpeed != null ">#{northSpeed},</if>
+            <if test="northeastNum != null ">#{northeastNum},</if>
+            <if test="northeastSpeed != null ">#{northeastSpeed},</if>
+            <if test="northwestNum != null ">#{northwestNum},</if>
+            <if test="northwestSpeed != null ">#{northwestSpeed},</if>
+            <if test="southeastNum != null ">#{southeastNum},</if>
+            <if test="southeastSpeed != null ">#{southeastSpeed},</if>
+            <if test="southwestNum != null ">#{southwestNum},</if>
+            <if test="southwestSpeed != null ">#{southwestSpeed},</if>
+            <if test="nneSpeed != null ">#{nneSpeed},</if>
+            <if test="nneNum != null ">#{nneNum},</if>
+            <if test="eneSpeed != null ">#{eneSpeed},</if>
+            <if test="eneNum != null ">#{eneNum},</if>
+            <if test="sseSpeed != null ">#{sseSpeed},</if>
+            <if test="sseNum != null ">#{sseNum},</if>
+            <if test="eseSpeed != null ">#{eseSpeed},</if>
+            <if test="eseNum != null ">#{eseNum},</if>
+            <if test="sswSpeed != null ">#{sswSpeed},</if>
+            <if test="sswNum != null ">#{sswNum},</if>
+            <if test="wswSpeed != null ">#{wswSpeed},</if>
+            <if test="wswNum != null ">#{wswNum},</if>
+            <if test="nnwSpeed != null ">#{nnwSpeed},</if>
+            <if test="nnwNum != null ">#{nnwNum},</if>
+            <if test="wnwSpeed != null ">#{wnwSpeed},</if>
+            <if test="wnwNum != null ">#{wnwNum},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizWindDatatotal" parameterType="BizWindDatatotal">
+        update biz_wind_datatotal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="eastNum != null ">east_num = #{eastNum},</if>
+            <if test="eastSpeed != null ">east_speed = #{eastSpeed},</if>
+            <if test="westNum != null ">west_num = #{westNum},</if>
+            <if test="westSpeed != null ">west_speed = #{westSpeed},</if>
+            <if test="southNum != null ">south_num = #{southNum},</if>
+            <if test="southSpeed != null ">south_speed = #{southSpeed},</if>
+            <if test="northNum != null ">north_num = #{northNum},</if>
+            <if test="northSpeed != null ">north_speed = #{northSpeed},</if>
+            <if test="northeastNum != null ">northeast_num = #{northeastNum},</if>
+            <if test="northeastSpeed != null ">northeast_speed = #{northeastSpeed},</if>
+            <if test="northwestNum != null ">northwest_num = #{northwestNum},</if>
+            <if test="northwestSpeed != null ">northwest_speed = #{northwestSpeed},</if>
+            <if test="southeastNum != null ">southeast_num = #{southeastNum},</if>
+            <if test="southeastSpeed != null ">southeast_speed = #{southeastSpeed},</if>
+            <if test="southwestNum != null ">southwest_num = #{southwestNum},</if>
+            <if test="southwestSpeed != null ">southwest_speed = #{southwestSpeed},</if>
+            <if test="nneSpeed != null ">nne_speed = #{nneSpeed},</if>
+            <if test="nneNum != null ">nne_num = #{nneNum},</if>
+            <if test="eneSpeed != null ">ene_speed = #{eneSpeed},</if>
+            <if test="eneNum != null ">ene_num = #{eneNum},</if>
+            <if test="sseSpeed != null ">sse_speed = #{sseSpeed},</if>
+            <if test="sseNum != null ">sse_num = #{sseNum},</if>
+            <if test="eseSpeed != null ">ese_speed = #{eseSpeed},</if>
+            <if test="eseNum != null ">ese_num = #{eseNum},</if>
+            <if test="sswSpeed != null ">ssw_speed = #{sswSpeed},</if>
+            <if test="sswNum != null ">ssw_num = #{sswNum},</if>
+            <if test="wswSpeed != null ">wsw_speed = #{wswSpeed},</if>
+            <if test="wswNum != null ">wsw_num = #{wswNum},</if>
+            <if test="nnwSpeed != null ">nnw_speed = #{nnwSpeed},</if>
+            <if test="nnwNum != null ">nnw_num = #{nnwNum},</if>
+            <if test="wnwSpeed != null ">wnw_speed = #{wnwSpeed},</if>
+            <if test="wnwNum != null ">wnw_num = #{wnwNum},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizWindDatatotalById" parameterType="Long">
+        delete from biz_wind_datatotal where id = #{id}
+    </delete>
+
+    <delete id="deleteBizWindDatatotalByIds" parameterType="String">
+        delete from biz_wind_datatotal where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectRecentlyDay" resultMap="BizWindDatatotalResult">
+    	SELECT * FROM biz_wind_datatotal WHERE type = 1 and status=1 ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectRecentlyMonth" resultMap="BizWindDatatotalResult">
+    	SELECT * FROM biz_wind_datatotal WHERE type = 2 and status=1 ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="selectRecentlyYear" resultMap="BizWindDatatotalResult">
+    	SELECT * FROM biz_wind_datatotal WHERE type = 3 and status=1 ORDER BY id DESC LIMIT 1
+    </select>
+    
+</mapper>

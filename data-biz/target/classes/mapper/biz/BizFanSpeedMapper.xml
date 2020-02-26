@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizFanSpeedMapper">
+    
+    <resultMap type="com.data.biz.domain.BizFanSpeed" id="BizFanSpeedResult">
+        <result property="id"    column="id"    />
+        <result property="fanId"    column="fan_id"    />
+        <result property="direction"    column="direction"    />
+        <result property="windSpeed"    column="wind_speed"    />
+        <result property="rotateSpeed"    column="rotate_speed"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBizFanSpeedVo">
+        select id, fan_id, direction, wind_speed, rotate_speed, create_time from biz_fan_speed
+    </sql>
+
+    <select id="selectBizFanSpeedList" parameterType="BizFanSpeed" resultMap="BizFanSpeedResult">
+        <include refid="selectBizFanSpeedVo"/>
+        <where>  
+            <if test="fanId != null "> and fan_id = #{fanId}</if>
+            <if test="direction != null "> and direction = #{direction}</if>
+            <if test="windSpeed != null "> and wind_speed = #{windSpeed}</if>
+            <if test="rotateSpeed != null "> and rotate_speed = #{rotateSpeed}</if>
+        </where>
+    </select>
+    <select id="selectBizFanSpeedById" parameterType="long" resultMap="BizFanSpeedResult">
+        <include refid="selectBizFanSpeedVo"/>
+        select * from biz_fan_speed
+        where id = #{id}
+    </select>
+    
+        
+    <insert id="insertBizFanSpeed" parameterType="BizFanSpeed">
+        insert into biz_fan_speed
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="fanId != null ">fan_id,</if>
+            <if test="direction != null ">direction,</if>
+            <if test="windSpeed != null ">wind_speed,</if>
+            <if test="rotateSpeed != null ">rotate_speed,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="fanId != null ">#{fanId},</if>
+            <if test="direction != null ">#{direction},</if>
+            <if test="windSpeed != null ">#{windSpeed},</if>
+            <if test="rotateSpeed != null ">#{rotateSpeed},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizFanSpeed" parameterType="BizFanSpeed">
+        update biz_fan_speed
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fanId != null ">fan_id = #{fanId},</if>
+            <if test="direction != null ">direction = #{direction},</if>
+            <if test="windSpeed != null ">wind_speed = #{windSpeed},</if>
+            <if test="rotateSpeed != null ">rotate_speed = #{rotateSpeed},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizFanSpeedById" parameterType="Long">
+        delete from biz_fan_speed where id = #{id}
+    </delete>
+
+    <delete id="deleteBizFanSpeedByIds" parameterType="String">
+        delete from biz_fan_speed where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

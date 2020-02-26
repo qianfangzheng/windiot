@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('表格数据汇总')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+		    <div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								<!-- <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.exportExcel()" shiro:hasPermission="windpower:datatotal:export">
+								<i class="fa fa-search"></i>&nbsp;导出</a> -->
+                             <label class="font-noraml">类型:</label>
+                             <select  id="dataType" style="height: 35px;display: inline-block;">
+                                 <option value="dayData">日数据</option>
+                                 <option value="monthData">月数据</option>
+							     <option value="yearData">年数据</option>
+                             </select>
+							</li>
+							<li>
+								<a id="serachBtn" class="btn btn-primary btn-rounded btn-sm"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+            </form>
+            <!-- <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:datatotal:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:datatotal:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:datatotal:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="windpower:datatotal:export">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div> -->
+			</div>
+			
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <th:block th:include="include :: footer" />
+	<th:block th:include="include :: layout-latest-js" />
+	<th:block th:include="include :: ztree-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "windpower/batteryleftselect";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+
+        $(function() {
+            $("#serachBtn").click(function(){
+            	options.url = prefix+"/list?dataType="+$("#dataType").val();
+            	$.table.destroy();
+            	$.table.init(options);
+            })
+            var queryUrl = prefix + "/list?dataType="+$("#dataType").val();
+            var options = {
+                url: queryUrl,
+                exportUrl: prefix + "/export",
+		        showFooter: true,
+		        showSearch: false,
+		        cache: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '序号'
+				},
+				{
+					field : 'createTime', 
+					title : '统计时间',
+			        sortable: true,
+				},
+				{
+					field : 'powerGeneration', 
+					title : '发电量(KW)',
+					formatter:function(value, row, index){
+						return value;
+					}
+				}]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

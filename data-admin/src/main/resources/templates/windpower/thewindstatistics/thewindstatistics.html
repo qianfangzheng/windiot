@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('百度ECharts')" />
+<script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+<style type="text/css">
+.echarts {
+	height: 331.6px;
+}
+
+.fname {
+	
+}
+
+.fvalue {
+	color: blue;
+}
+
+.funit {
+	color: #f07f39;
+}
+
+tbody>tr {
+	hight: 50px;
+}
+
+tbody>tr:hover {
+	background-color: wheat !important;
+}
+</style>
+</head>
+<body class="gray-bg">
+
+	<th:block th:include="include :: datatotal" />
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>日数据统计/次</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="row show-grid">
+							<table class="table">
+								<tbody>
+									<tr>
+										<td class="fname">北方向</td>
+										<td class="fvalue" th:text="${dayData.northNum}">data</td>
+										<td class="fname">北东北方向</td>
+										<td class="fvalue" th:text="${dayData.nneNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东北方向</td>
+										<td class="fvalue" th:text="${dayData.northeastNum}">data</td>
+										<td class="fname">东东北方向</td>
+										<td class="fvalue" th:text="${dayData.eneNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东方向</td>
+										<td class="fvalue" th:text="${dayData.eastNum}">data</td>
+										<td class="fname">东东南方向</td>
+										<td class="fvalue" th:text="${dayData.eseNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东南方向</td>
+										<td class="fvalue" th:text="${dayData.southeastNum}">data</td>
+										<td class="fname">南东南方向</td>
+										<td class="fvalue" th:text="${dayData.sseNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">南方向</td>
+										<td class="fvalue" th:text="${dayData.southNum}">data</td>
+										<td class="fname">南西南方向</td>
+										<td class="fvalue" th:text="${dayData.sswNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西南方向</td>
+										<td class="fvalue" th:text="${dayData.southwestNum}">data</td>
+										<td class="fname">西西南方向</td>
+										<td class="fvalue" th:text="${dayData.wswNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西方向</td>
+										<td class="fvalue" th:text="${dayData.westNum}">data</td>
+										<td class="fname">西西北方向</td>
+										<td class="fvalue" th:text="${dayData.wnwNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西北方向</td>
+										<td class="fvalue" th:text="${dayData.northwestNum}">data</td>
+										<td class="fname">北西北方向</td>
+										<td class="fvalue" th:text="${dayData.nnwNum}">data</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>昨日风向频率玫瑰图</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="echarts" id="main-day"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>月数据统计/次</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="row show-grid">
+							<table class="table">
+								<tbody>
+									<tr>
+										<td class="fname">北方向</td>
+										<td class="fvalue" th:text="${monthData.northNum}">data</td>
+										<td class="fname">北东北方向</td>
+										<td class="fvalue" th:text="${monthData.nneNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东北方向</td>
+										<td class="fvalue" th:text="${monthData.northeastNum}">data</td>
+										<td class="fname">东东北方向</td>
+										<td class="fvalue" th:text="${monthData.eneNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东方向</td>
+										<td class="fvalue" th:text="${monthData.eastNum}">data</td>
+										<td class="fname">东东南方向</td>
+										<td class="fvalue" th:text="${monthData.eseNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东南方向</td>
+										<td class="fvalue" th:text="${monthData.southeastNum}">data</td>
+										<td class="fname">南东南方向</td>
+										<td class="fvalue" th:text="${monthData.sseNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">南方向</td>
+										<td class="fvalue" th:text="${monthData.southNum}">data</td>
+										<td class="fname">南西南方向</td>
+										<td class="fvalue" th:text="${monthData.sswNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西南方向</td>
+										<td class="fvalue" th:text="${monthData.southwestNum}">data</td>
+										<td class="fname">西西南方向</td>
+										<td class="fvalue" th:text="${monthData.wswNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西方向</td>
+										<td class="fvalue" th:text="${monthData.westNum}">data</td>
+										<td class="fname">西西北方向</td>
+										<td class="fvalue" th:text="${monthData.wnwNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西北方向</td>
+										<td class="fvalue" th:text="${monthData.northwestNum}">data</td>
+										<td class="fname">北西北方向</td>
+										<td class="fvalue" th:text="${monthData.nnwNum}">data</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>上月风向频率玫瑰图</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="echarts" id="main-month"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>年数据统计/次</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="row show-grid">
+							<table class="table">
+								<tbody>
+									<tr>
+										<td class="fname">北方向</td>
+										<td class="fvalue" th:text="${yearData.northNum}">data</td>
+										<td class="fname">北东北方向</td>
+										<td class="fvalue" th:text="${yearData.nneNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东北方向</td>
+										<td class="fvalue" th:text="${yearData.northeastNum}">data</td>
+										<td class="fname">东东北方向</td>
+										<td class="fvalue" th:text="${yearData.eneNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东方向</td>
+										<td class="fvalue" th:text="${yearData.eastNum}">data</td>
+										<td class="fname">东东南方向</td>
+										<td class="fvalue" th:text="${yearData.eseNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东南方向</td>
+										<td class="fvalue" th:text="${yearData.southeastNum}">data</td>
+										<td class="fname">南东南方向</td>
+										<td class="fvalue" th:text="${yearData.sseNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">南方向</td>
+										<td class="fvalue" th:text="${yearData.southNum}">data</td>
+										<td class="fname">南西南方向</td>
+										<td class="fvalue" th:text="${yearData.sswNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西南方向</td>
+										<td class="fvalue" th:text="${yearData.southwestNum}">data</td>
+										<td class="fname">西西南方向</td>
+										<td class="fvalue" th:text="${yearData.wswNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西方向</td>
+										<td class="fvalue" th:text="${yearData.westNum}">data</td>
+										<td class="fname">西西北方向</td>
+										<td class="fvalue" th:text="${yearData.wnwNum}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西北方向</td>
+										<td class="fvalue" th:text="${yearData.northwestNum}">data</td>
+										<td class="fname">北西北方向</td>
+										<td class="fvalue" th:text="${yearData.nnwNum}">data</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>上年风向频率玫瑰图</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="echarts" id="main-year"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+    	var data = {
+    			dayData: {
+    				northNum: 0,
+    				northNum: 0,
+    				northeastNum: 0,
+    				northeastNum: 0,
+    				northwestNum: 0,
+    				northwestNum: 0,
+    				eastNum: 0,
+    				eastNum: 0,
+    				southNum: 0,
+    				southNum: 0,
+    				southeastNum: 0,
+    				southeastNum: 0,
+    				southwestNum: 0,
+    				southwestNum: 0,
+    				westNum: 0,
+    				westNum: 0,
+    			    nneSpeed: 0,
+    			    nneNum: 0,
+    			    eneSpeed: 0,
+    			    eneNum: 0,
+    			    sseSpeed: 0,
+    			    sseNum: 0,
+    			    eseSpeed: 0,
+    			    eseNum: 0,
+    			    sswSpeed: 0,
+    			    sswNum: 0,
+    			    wswSpeed: 0,
+    			    wswNum: 0,
+    			    nnwSpeed: 0,
+    			    nnwNum: 0,
+    			    wnwSpeed: 0,
+					wnwNum: 0
+    			},
+    			monthData: {
+    				northNum: 0,
+    				northNum: 0,
+    				northeastNum: 0,
+    				northeastNum: 0,
+    				northwestNum: 0,
+    				northwestNum: 0,
+    				eastNum: 0,
+    				eastNum: 0,
+    				southNum: 0,
+    				southNum: 0,
+    				southeastNum: 0,
+    				southeastNum: 0,
+    				southwestNum: 0,
+    				southwestNum: 0,
+    				westNum: 0,
+    				westNum: 0,
+    				nneSpeed: 0,
+    			    nneNum: 0,
+    			    eneSpeed: 0,
+    			    eneNum: 0,
+    			    sseSpeed: 0,
+    			    sseNum: 0,
+    			    eseSpeed: 0,
+    			    eseNum: 0,
+    			    sswSpeed: 0,
+    			    sswNum: 0,
+    			    wswSpeed: 0,
+    			    wswNum: 0,
+    			    nnwSpeed: 0,
+    			    nnwNum: 0,
+    			    wnwSpeed: 0,
+					wnwNum: 0
+    			},
+    			yearData: {
+    				northNum: 0,
+    				northNum: 0,
+    				northeastNum: 0,
+    				northeastNum: 0,
+    				northwestNum: 0,
+    				northwestNum: 0,
+    				eastNum: 0,
+    				eastNum: 0,
+    				southNum: 0,
+    				southNum: 0,
+    				southeastNum: 0,
+    				southeastNum: 0,
+    				southwestNum: 0,
+    				southwestNum: 0,
+    				westNum: 0,
+    				westNum: 0,
+    				nneSpeed: 0,
+    			    nneNum: 0,
+    			    eneSpeed: 0,
+    			    eneNum: 0,
+    			    sseSpeed: 0,
+    			    sseNum: 0,
+    			    eseSpeed: 0,
+    			    eseNum: 0,
+    			    sswSpeed: 0,
+    			    sswNum: 0,
+    			    wswSpeed: 0,
+    			    wswNum: 0,
+    			    nnwSpeed: 0,
+    			    nnwNum: 0,
+    			    wnwSpeed: 0,
+					wnwNum: 0
+    			}
+    	};
+    	//<![CDATA[
+    	var dayData = [[${dayData}]];
+    	var monthData = [[${monthData}]];
+    	var yearData = [[${yearData}]];
+    	//]]>
+        // 基于准备好的dom，初始化echarts实例
+        var myChartDay = echarts.init(document.getElementById('main-day'));
+        var myChartMonth = echarts.init(document.getElementById('main-month'));
+        var myChartYear = echarts.init(document.getElementById('main-year'));
+        // 指定图表的配置项和数据
+        var optionDay = {
+        		 color: ['#70e7ef'],
+        		    title: {
+        		        text: '',
+        		        x: 'center',
+        		        textStyle: {
+        		            color: '#30465D',
+        		            fontSize: '14',
+        		            fontWeight: 'bold'
+        		        }
+        		    },
+        		    angleAxis: {
+        		        type: 'category',
+        		        data: ["北", "北东北", "东北", "东东北", "东", "东东南", "东南", "南东南", "南", "南西南", "西南", "西西南", "西", "西西北", "西北", "北西北"],
+        		        boundaryGap: false,
+        		        axisTick: {
+        		            alignWithLabel: true
+        		        },
+        		        axisLine: {
+        		            lineStyle: {
+        		                color: '#30465D'
+        		            }
+        		        },
+        		        splitLine: {
+        		            show: true
+        		        }
+        		    },
+        		    radiusAxis: {
+        		        axisLine: {
+        		            show: false
+        		        },
+        		        axisTick: {
+        		            show: false
+        		        },
+        		        axisLabel: {
+        		            formatter: '{value}%',
+        		            showMaxLabel: false,
+        		            color: '#30465D'
+        		        },
+        		        z: 10
+        		    },
+        		    tooltip: {},
+        		    polar: {},
+        		    legend: {
+        		        show: true,
+        		        right: 0,
+        		        bottom: 0,
+        		        type: 'scroll',
+        		        orient: 'vertical',
+        		        data: ['<0.5m/s', '0.5-2m/s', '2-4m/s', '4-6m/s', '6-8m/s', '8-10m/s', '>10m/s']
+        		    },
+        		    series: [{
+        		        type: 'bar',
+        		        data: [dayData.northNum,dayData.nneNum, dayData.northeastNum, dayData.eneNum,dayData.eastNum,dayData.eseNum, dayData.southeastNum,dayData.sseNum,dayData.southNum,dayData.sswNum,dayData.southwestNum,dayData.wswNum, dayData.westNum,dayData.wswNum,dayData.northwestNum,dayData.nnwNum],
+        		        coordinateSystem: 'polar',
+        		        name: '风向频率',
+        		        stack: 'a'
+        		    }]
+        		};
+        var optionMonth = {
+       		 color: ['#497de0'],
+       		    title: {
+       		        text: '',
+       		        x: 'center',
+       		        textStyle: {
+       		            color: '#30465D',
+       		            fontSize: '14',
+       		            fontWeight: 'bold'
+       		        }
+       		    },
+       		    angleAxis: {
+       		        type: 'category',
+       		        data: ["北", "北东北", "东北", "东东北", "东", "东东南", "东南", "南东南", "南", "南西南", "西南", "西西南", "西", "西西北", "西北", "北西北"],
+       		        boundaryGap: false,
+       		        axisTick: {
+       		            alignWithLabel: true
+       		        },
+       		        axisLine: {
+       		            lineStyle: {
+       		                color: '#30465D'
+       		            }
+       		        },
+       		        splitLine: {
+       		            show: true
+       		        }
+       		    },
+       		    radiusAxis: {
+       		        axisLine: {
+       		            show: false
+       		        },
+       		        axisTick: {
+       		            show: false
+       		        },
+       		        axisLabel: {
+       		            formatter: '{value}%',
+       		            showMaxLabel: false,
+       		            color: '#30465D'
+       		        },
+       		        z: 10
+       		    },
+       		    tooltip: {},
+       		    polar: {},
+       		    legend: {
+       		        show: true,
+       		        right: 0,
+       		        bottom: 0,
+       		        type: 'scroll',
+       		        orient: 'vertical',
+       		        data: ['<0.5m/s', '0.5-2m/s', '2-4m/s', '4-6m/s', '6-8m/s', '8-10m/s', '>10m/s']
+       		    },
+       		    series: [{
+       		        type: 'bar',
+       		        data: [monthData.northNum,monthData.nneNum, monthData.northeastNum, monthData.eneNum,monthData.eastNum,monthData.eseNum, monthData.southeastNum,monthData.sseNum,monthData.southNum,monthData.sswNum,monthData.southwestNum,monthData.wswNum, monthData.westNum,monthData.wswNum,monthData.northwestNum,monthData.nnwNum],
+       		        coordinateSystem: 'polar',
+       		        name: '风向频率',
+       		        stack: 'a'
+       		    }]
+       		};
+        var optionYear	 = {
+       		 color: ['#9a66e5'],
+       		    title: {
+       		        text: '',
+       		        x: 'center',
+       		        textStyle: {
+       		            color: '#30465D',
+       		            fontSize: '14',
+       		            fontWeight: 'bold'
+       		        }
+       		    },
+       		    angleAxis: {
+       		        type: 'category',
+       		        data: ["北", "北东北", "东北", "东东北", "东", "东东南", "东南", "南东南", "南", "南西南", "西南", "西西南", "西", "西西北", "西北", "北西北"],
+       		        boundaryGap: false,
+       		        axisTick: {
+       		            alignWithLabel: true
+       		        },
+       		        axisLine: {
+       		            lineStyle: {
+       		                color: '#30465D'
+       		            }
+       		        },
+       		        splitLine: {
+       		            show: true
+       		        }
+       		    },
+       		    radiusAxis: {
+       		        axisLine: {
+       		            show: false
+       		        },
+       		        axisTick: {
+       		            show: false
+       		        },
+       		        axisLabel: {
+       		            formatter: '{value}%',
+       		            showMaxLabel: false,
+       		            color: '#30465D'
+       		        },
+       		        z: 10
+       		    },
+       		    tooltip: {},
+       		    polar: {},
+       		    legend: {
+       		        show: true,
+       		        right: 0,
+       		        bottom: 0,
+       		        type: 'scroll',
+       		        orient: 'vertical',
+       		        data: ['<0.5m/s', '0.5-2m/s', '2-4m/s', '4-6m/s', '6-8m/s', '8-10m/s', '>10m/s']
+       		    },
+       		    series: [{
+       		        type: 'bar',
+       		        data: [yearData.northNum,yearData.nneNum, yearData.northeastNum, yearData.eneNum,yearData.eastNum,yearData.eseNum, yearData.southeastNum,yearData.sseNum,yearData.southNum,yearData.sswNum,yearData.southwestNum,yearData.wswNum, yearData.westNum,yearData.wswNum,yearData.northwestNum,yearData.nnwNum],
+       		        coordinateSystem: 'polar',
+       		        name: '风向频率',
+       		        stack: 'a'
+       		    }]
+       		};
+        
+        // 使用刚指定的配置项和数据显示图表。
+        myChartDay.setOption(optionDay);
+        myChartMonth.setOption(optionMonth);
+        myChartYear.setOption(optionYear);
+    </script>
+
+</body>
+</html>

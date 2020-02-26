@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('百度ECharts')" />
+<script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+<script src="/js/jquery-2.0.0.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/bootstrap-paginator.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+.echarts {
+	
+}
+.leftinfo{
+		background:url("/img/fan.gif")no-repeat;  
+    	width:100%;height:227px;  
+    	background-size:100%100%;  
+    	background-position:center center;
+}
+.fname{
+	font-weight:bold;
+	font-size:12px;
+}
+
+.fvalue {
+	font-size:10px;
+	color:blue;
+}
+.funit {
+	font-size:8px;
+	font-style:oblique;
+	color:#f07f39;
+}
+tbody>tr:hover {
+    background-color: wheat!important;
+}
+.ibox{
+	margin: 0 0 27px;
+}
+</style>
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+            <div class="col-sm-2">
+            	
+            		<div class="row ">
+                    	<div class="pull-left leftinfo">
+                    		大型风力发电机
+                    	</div>
+                    </div>
+                    <div class="row ">
+                    	<div class="ibox float-e-margins">
+                    		<div class="ibox-title">
+                        		<h5>配置信息</h5>
+		                        <div class="ibox-tools">
+		                            <a class="collapse-link">
+		                                <i class="fa fa-chevron-up"></i>
+		                            </a>
+		                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+		                                <i class="fa fa-wrench"></i>
+		                            </a>
+		                            <ul class="dropdown-menu dropdown-user">
+		                                <li><a href="graph_flot.html#">选项1</a>
+		                                </li>
+		                                <li><a href="graph_flot.html#">选项2</a>
+		                                </li>
+		                            </ul>
+		                            <a class="close-link">
+		                                <i class="fa fa-times"></i>
+		                            </a>
+		                        </div>
+                   			</div>
+                   			
+                   			<div>
+                   				<table class="table">
+									  <tbody>
+									    <tr>
+									      <td class="fname">编号</td>
+									      <td class="fvalue" th:text="${bizFan.fanCode}">003</td>
+									      <td class="funit"></td>
+									    </tr>
+									    <tr>
+									      <td class="fname">品牌</td>
+									      <td class="fvalue" th:text="${bizFan.brand}">飓风</td>
+									      <td class="funit"></td>
+									    </tr>
+									    <tr>
+									      <td class="fname">功率</td>
+									      <td class="fvalue" th:text="${bizFan.power}">80</td>
+									      <td class="funit">kw/h</td>
+									    </tr>
+									    <tr>
+									      <td class="fname">实际功率</td>
+									      <td class="fvalue" th:text="${bizFan.realPower}">75</td>
+									      <td class="funit">kw/h</td>
+									    </tr>
+									    <tr>
+									      <td class="fname">坐标</td>
+									      <td class="fvalue" th:text="${bizFan.coordinates}">(1.2.2.1)</td>
+									      <td class="funit"></td>
+									    </tr>
+									    <tr>
+									      <td class="fname">安装时间</td>
+									      <td class="fvalue" th:text="${bizFan.installTime}">2019.12.16</td>
+									      <td class="funit"></td>
+									    </tr>
+									    <tr>
+									      <td class="fname">状态</td>
+									      <td class="fvalue" id="status-text">正常</td>
+									      <td class="funit"></td>
+									    </tr>
+									  </tbody>
+								</table>
+								<center>
+                   					<a class="btn btn-info btn-rounded btn-sm" onclick="javascript :history.back(-1);"><i class="fa fa-angle-double-left"></i>&nbsp;返回上一页</a>
+                   				</center>
+                   			</div>
+                    	</div>
+                    </div>
+                
+            </div>
+            <div class="col-sm-10">
+            	<div class="row">
+            	<!-- 
+            		<div class="ibox float-e-margins">
+	                    <div class="ibox-title">
+	                        <h5>风机结构</h5>
+	                        <div class="ibox-tools">
+	                            <a class="collapse-link">
+	                                <i class="fa fa-chevron-up"></i>
+	                            </a>
+	                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+	                                <i class="fa fa-wrench"></i>
+	                            </a>
+	                            <ul class="dropdown-menu dropdown-user">
+	                                <li><a href="graph_flot.html#">选项1</a>
+	                                </li>
+	                                <li><a href="graph_flot.html#">选项2</a>
+	                                </li>
+	                            </ul>
+	                            <a class="close-link">
+	                                <i class="fa fa-times"></i>
+	                            </a>
+	                        </div>
+	                    </div>
+	                    <div class="ibox-content">
+	                       11
+	                    </div>
+                	</div>
+            	 -->
+            	</div>
+            	<div class="row">
+            		<div class="col-sm-3">
+            			<div class="row">
+	            			<div class="ibox float-e-margins">
+	            				<div class="ibox-title">
+	            					<center><strong>实时预览</strong></center>
+		                    	</div>
+		                    	<div class="ibox-content">
+		                        	<table class="table">
+										  <tbody>
+										    <tr>
+										      <td class="fname">交流电压</td>
+										      <td class="fvalue" id="acVoltage">25.25</td>
+										    </tr>
+										    <tr>
+										      <td class="fname">发电机输出</td>
+										      <td class="fvalue" id="fanOutput">30.99</td>
+										    </tr>
+										    <tr>
+										      <td class="fname">输出频率</td>
+										      <td class="fvalue" id="fanOutputFrequency">80</td>
+										    </tr>
+										    <tr>
+										      <td class="fname">功率因素</td>
+										      <td class="fvalue" id="fanFactor">75</td>
+										    </tr>
+										    <!--  
+										    <tr>
+										      <td class="fname">瞬时功率</td>
+										      <td class="fvalue">81.25</td>
+										    </tr>
+										    <tr>
+										      <td class="fname">当前风速</td>
+										      <td class="fvalue">1.25</td>
+										    </tr>
+										    -->
+										    <tr>
+										      <td class="fname">当前风向角</td>
+										      <td class="fvalue" id="direction">121°</td>
+										    </tr>
+										    <tr>
+										      <td class="fname">机舱角度</td>
+										      <td class="fvalue" id="cabinAngle">56.20°</td>
+										    </tr>
+										    <tr>
+										      <td class="fname">齿轮油压力</td>
+										      <td class="fvalue" id="oilPressure">160</td>
+										    </tr>
+										    
+										  </tbody>
+									</table>
+			                    	
+		                    	</div>
+							</div>
+            			</div>
+            			<div class="row">
+	            			<div class="ibox float-e-margins">
+	            				<div class="ibox-title">
+	            					<center><strong>统计信息</strong></center>
+		                        	
+		                    	</div>
+		                    	<div class="ibox-content">
+		                        	<table class="table">
+										  <tbody>
+										    <tr>
+										      <td class="fname">总发电量</td>
+										      <td class="fvalue" th:text="${bizFanDetail.sumelectric} == null ? 暂无数据 :${bizFanDetail.sumelectric}">25.25</td>
+										    </tr>
+										    <tr>
+										      <td class="fname">故障次数</td>
+										      <td class="fvalue" th:text="${bizFanDetail.faultCount} == null ? 暂无数据 :${bizFanDetail.faultCount}">30.99</td>
+										    </tr>
+										   	<tr>
+										      <td class="fname">偏航次数</td>
+										      <td class="fvalue" th:text="${bizFanDetail.yawCount} == null ? 暂无数据 :${bizFanDetail.yawCount}">30.99</td>
+										    </tr>
+										    
+										  </tbody>
+									</table>
+			                    	
+		                    	</div>
+							</div>
+            			</div>
+            		</div>
+            		<div class="col-sm-5">
+            			<div class="ibox float-e-margins">
+            				<div class="ibox-title" style="text-algin:center">
+            					<center><strong>温度检测</strong></center>
+	                    	</div>
+	                    	<div class="ibox-content">
+	                    		<div class="echarts" id="mainT"></div>
+	                    		<div class="echarts" id="main1"></div>
+	                    	</div>	
+	                    </div>
+            		</div>
+            		<div class="col-sm-4">
+            			<div class="row">
+            				<div class="ibox float-e-margins">
+	            				<div class="ibox-title" style="text-algin:center">
+	            					<center><strong>风速功率</strong></center>
+		                    	</div>
+		                    	<div class="ibox-content">
+		                    		<div class="echarts"  id="mainPower"></div>
+		                    		<div class="echarts"  id="mainWind"></div>
+		                    	</div>	
+	                    	</div>
+            			</div>
+            		</div>
+            	</div>
+            </div>
+        </div>
+		
+	</div>
+<script type="text/javascript">
+var fanId = [[${bizFan.fanCode}]];
+if(typeof(WebSocket) == "undefined") {
+    console.log("您的浏览器不支持WebSocket");
+}else{
+    console.log("您的浏览器支持WebSocket");
+    //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+    //等同于
+    index = new WebSocket("ws://tenddb.zsis.net:8080/websocket/"+fanId);
+    //socket = new WebSocket("${basePath}websocket/${cid}".replace("http","ws"));
+    //打开事件
+    index.onopen = function() {
+        console.log("Socket 已打开");
+        index.send("这是来自客户端的消息" + location.href + new Date());
+    };
+    //获得消息事件
+    index.onmessage = function(msg) {
+    	var reg = new RegExp('"',"g");
+    	var json12 = JSON.parse(msg.data);
+        //发现消息进入    开始处理前端触发逻辑
+        $("#acVoltage").text(json12.fanAcVoltage);
+        $("#fanOutput").text(json12.fanOutput);
+        $("#fanOutputFrequency").text(json12.fanOutputFrequency);
+        $("#fanFactor").text(json12.fanFactor);
+        $("#direction").text(json12.windDirection);
+        $("#cabinAngle").text(json12.fanCabinAngle);
+        $("#oilPressure").text(json12.fanOilPressure);
+        var cabinTValue = (json12.cabinT).toFixed(0);
+        var oilTValue = (json12.oilT).toFixed(0);
+        var lowShaftTValue = (json12.lowShaftT).toFixed(0);
+        var highShaftTValue = (json12.highShaftT).toFixed(0);
+           // 当状态更新后改变温度仪表盘值
+		   dataLine = [cabinTValue, oilTValue, lowShaftTValue,highShaftTValue];// 调整长度
+		   myChartDay.setOption(option);
+		   myChartDay.setOption({
+			   series: [
+			         { //间距
+			             type: 'bar',
+			             barWidth: 15,
+			             stack: 'b',
+			             legendHoverLink: false,
+			             itemStyle: {
+			                 normal: {
+			                     color: 'rgba(0,0,0,0)'
+			                 }
+			             },
+			             z: 3,
+			             data: [positionLeft, positionLeft, positionLeft, positionLeft]
+			         }, {
+			             name: '条',
+			             type: 'bar',
+			             stack: 'b',
+			             yAxisIndex: 0,
+			             data: dataLine,
+			             label: {
+			                 normal: {
+			                     show: false,
+			                     position: 'right',
+			                     distance: 30,
+			                     formatter: function(param) {
+			                         return param.value + '%'
+			                     },
+			                     textStyle: {
+			                         color: '#ffffff',
+			                         fontSize: '12'
+			                     }
+			                 }
+			             },
+			             barWidth: 30,
+			             itemStyle: {
+			                 color: {
+			                     image: g_cellBarImg0_y,
+			                     repeat: 'repeat'
+			                 }
+			                 /*normal: {
+			                     color: function(params) {
+			                         var num = myColor.length
+			                         return myColor[params.dataIndex % num]
+			                     }
+			                 }*/
+			             },
+			             z: 2
+			         }, {
+			             name: '白框',
+			             type: 'bar',
+			             yAxisIndex: 1,
+			             barGap: '-100%',
+			             data: [99.8, 99.9, 99.9, 99.9],
+			             barWidth: 57,
+			             itemStyle: {
+			                 normal: {
+			                     color: '#0e2147',
+			                     barBorderRadius: 2
+			                 }
+			             },
+			             z: 1
+			         },
+			         {
+			             name: '外框',
+			             type: 'bar',
+			             yAxisIndex: 2,
+			             barGap: '-100%',
+			             data: [100, 100, 100, 100],
+			             barWidth: 59,
+			             label: {
+			                 normal: {
+			                     show: false,
+			                     position: 'right',
+			                     distance: 30,
+			                     formatter: function(data) {
+			                         return dataLine[data.dataIndex] + "%";
+			                     },
+			                     textStyle: {
+			                         color: '#ffffff',
+			                         fontSize: '16'
+			                     }
+			                 }
+			             },
+			             itemStyle: {
+			                 normal: {
+			                     color: function(params) {
+			                         var num = myColor.length
+			                         return myColor[params.dataIndex % num]
+			                     },
+			                     barBorderRadius: [0, 7, 0, 7]
+			                 }
+			             },
+			             z: 0
+			         },
+			     ]
+		    });
+		   myChartDay.setOption({
+			   yAxis: [{
+			         axisTick: 'none',
+			         axisLine: 'none',
+			         axisLabel: {
+			             inside: true,
+			             align: 'left',
+			             textStyle: {
+			                 color: '#81E7ED',
+			                 fontSize: '8'
+			             }
+			         },
+			         z: 10,
+			         data: ['机舱温度', '箱油温度', '低速轴温', '高速轴温']
+			     }, {
+			         axisTick: 'none',
+			         axisLine: 'none',
+			         show: true,
+			         axisLabel: {
+			             inside: true,
+			             align: 'right',
+			             textStyle: {
+			                 color: '#ffffff',
+			                 fontSize: '12'
+			             }
+			         },
+			         z: 0,
+			         data: dataLine
+			     }, {
+			         axisLine: {
+			             lineStyle: {
+			                 color: 'rgba(0,0,0,0)'
+			             }
+			         },
+			     }],
+		    });
+		
+    };
+    //关闭事件
+    index.onclose = function() {
+        console.log("Socket已关闭");
+    };
+    //发生了错误事件
+    index.onerror = function() {
+        alert("Socket发生了错误");
+        //此时可以尝试刷新页面
+    }
+}
+</script>
+
+	<script th:inline="javascript">
+	// js获取风机状态:
+	var fanStatus = [[${bizFan.status}]];
+	// 状态0关闭1开启2异常
+	if(fanStatus == 0){
+		// 0关闭
+		$(".leftinfo").css("background","url('/img/fan_stop.png')no-repeat");
+		$(".leftinfo").css("width","100%");
+		$(".leftinfo").css("height","227px");
+		$(".leftinfo").css("background-size","100%100%");
+		$(".leftinfo").css("background-position","center center");
+		$("#status-text").text("关闭");
+	}else if(fanStatus == 2){
+		// 2异常
+		$(".leftinfo").css("background","url('/img/fan_fail.png')no-repeat");
+		$(".leftinfo").css("width","100%");
+		$(".leftinfo").css("height","227px");
+		$(".leftinfo").css("background-size","100%100%");
+		$(".leftinfo").css("background-position","center center");
+		$("#status-text").text("异常");
+	}
+	var myChartDay = echarts.init(document.getElementById('mainT'));
+	var myChart1 = echarts.init(document.getElementById('main1'));
+	// 功率统计线性图
+    // 基于准备好的dom，初始化echarts实例
+    var myChartPower = echarts.init(document.getElementById('mainPower'));
+	// 风速月功率统计线性图
+	// 基于准备好的dom，初始化echarts实例
+	var myChartWind = echarts.init(document.getElementById('mainWind'));
+	var myColor = ['#81E7ED'];
+
+//日统计x轴日期
+var windDataX = ["1.3","1.4","1.5","1.6","1.7","1.8"];
+//日统计Y轴功率
+var windDataY = [6.7,5.6,7.1,9.4,10,7.7];
+//月统计x轴日期
+var powerDataX = ["1.3","1.4","1.5","1.6","1.7","1.8"];
+//月统计Y轴功率
+var powerDataY = [198,179,191,186,181,190];
+	
+	
+	 var dataLine = [90, 56, 23, 15];// 调整长度
+	 var positionLeft = 20,
+	     max = 100 + positionLeft;
+
+	 var g_cellBar0_y = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAoCAYAAAAhf6DEAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAA6SURBVEhLY2x8/vY/A4mg3zwcTDOBSTLBqGYSwahmEsGoZhLBqGYSwahmEsGoZhLBqGYSwZDUzMAAAJldBMF2UASmAAAAAElFTkSuQmCC';
+	 var g_cellBarImg0_y = new Image();
+	 g_cellBarImg0_y.src = g_cellBar0_y;
+
+	 var option = {
+	     backgroundColor: '#101E44',
+	     grid: [{
+	             left: '8%',
+	             top: '12%',
+	             right: '5%',
+	             bottom: '8%',
+	             containLabel: true
+	         },
+	         {
+	             left: '10%',
+	             top: '12%',
+	             right: '5%',
+	             bottom: '8%',
+	             containLabel: true
+	         }
+	     ],
+	     xAxis: [{
+	         //   max:max,
+	         show: false
+	     }],
+	     yAxis: [{
+	         axisTick: 'none',
+	         axisLine: 'none',
+	         axisLabel: {
+	             inside: true,
+	             align: 'left',
+	             textStyle: {
+	                 color: '#81E7ED',
+	                 fontSize: '8'
+	             }
+	         },
+	         z: 10,
+	         data: ['机舱温度', '箱油温度', '低速轴温', '高速轴温']
+	     }, {
+	         axisTick: 'none',
+	         axisLine: 'none',
+	         show: true,
+	         axisLabel: {
+	             inside: true,
+	             align: 'right',
+	             textStyle: {
+	                 color: '#ffffff',
+	                 fontSize: '12'
+	             }
+	         },
+	         z: 10,
+	         data: [10, 56, 23, 15]
+	     }, {
+
+	         axisLine: {
+	             lineStyle: {
+	                 color: 'rgba(0,0,0,0)'
+	             }
+	         },
+	         data: []
+	     }],
+	     series: [
+
+	         { //间距
+	             type: 'bar',
+	             barWidth: 15,
+	             stack: 'b',
+	             legendHoverLink: false,
+	             itemStyle: {
+	                 normal: {
+	                     color: 'rgba(0,0,0,0)'
+	                 }
+	             },
+	             z: 3,
+	             data: [positionLeft, positionLeft, positionLeft, positionLeft]
+	         }, {
+	             name: '条',
+	             type: 'bar',
+	             stack: 'b',
+	             yAxisIndex: 0,
+	             data: dataLine,
+	             label: {
+	                 normal: {
+	                     show: false,
+	                     position: 'right',
+	                     distance: 30,
+	                     formatter: function(param) {
+	                         return param.value + '%'
+	                     },
+	                     textStyle: {
+	                         color: '#ffffff',
+	                         fontSize: '12'
+	                     }
+	                 }
+	             },
+	             barWidth: 30,
+	             itemStyle: {
+	                 color: {
+	                     image: g_cellBarImg0_y,
+	                     repeat: 'repeat'
+	                 }
+	                 /*normal: {
+	                     color: function(params) {
+	                         var num = myColor.length
+	                         return myColor[params.dataIndex % num]
+	                     }
+	                 }*/
+	             },
+	             z: 2
+	         }, {
+	             name: '白框',
+	             type: 'bar',
+	             yAxisIndex: 1,
+	             barGap: '-100%',
+	             data: [99.8, 99.9, 99.9, 99.9],
+	             barWidth: 57,
+	             itemStyle: {
+	                 normal: {
+	                     color: '#0e2147',
+	                     barBorderRadius: 2
+	                 }
+	             },
+	             z: 1
+	         },
+	         {
+	             name: '外框',
+	             type: 'bar',
+	             yAxisIndex: 2,
+	             barGap: '-100%',
+	             data: [100, 100, 100, 100],
+	             barWidth: 59,
+	             label: {
+	                 normal: {
+	                     show: false,
+	                     position: 'right',
+	                     distance: 30,
+	                     formatter: function(data) {
+	                         return dataLine[data.dataIndex] + "%";
+	                     },
+	                     textStyle: {
+	                         color: '#ffffff',
+	                         fontSize: '16'
+	                     }
+	                 }
+	             },
+	             itemStyle: {
+	                 normal: {
+	                     color: function(params) {
+	                         var num = myColor.length
+	                         return myColor[params.dataIndex % num]
+	                     },
+	                     barBorderRadius: [0, 7, 0, 7]
+	                 }
+	             },
+	             z: 0
+	         },
+	     ]
+	 };
+	 
+	 // 生成0-100的随机数
+	 function random(min, max) {
+	      return Math.floor(Math.random() * (max - min)) + min;
+	 }
+	 
+	 // 定时任务动态显示图像
+	 
+	 
+	 var highlight = 'white';
+
+	 var demoData = [
+	     {
+	         name: '转速',
+	         value: 10,
+	         unit: '%',
+	         pos: ['50%', '50%'],
+	         range: [0, 200],
+	         colora: 'rgba(193,136,244,0.9)',
+	         colorb: 'rgba(242,166,200,0.6)'
+	     }
+	 ];
+
+	 option1 = {
+	     backgroundColor: '#101E44',
+	     grid: {
+             left: '1%',
+             containLabel: true
+	     },
+	     series: (function() {
+	         var result = [];
+
+	         demoData.forEach(function(item) {
+	             result.push(
+	                 // 内侧指针、数值显示
+	                 {
+	                     name: item.name,
+	                     type: 'gauge',
+	                     center: item.pos,
+	                     radius: '60%',
+	                     startAngle: 225,
+	                     endAngle: -45,
+	                     min: 0,
+	                     max: 100,
+	                     axisLine: {
+	                         show: true,
+	                         lineStyle: {
+	                             width: 2,
+	                             color: [
+	                                 [
+	                                     item.value / 100, new echarts.graphic.LinearGradient(
+	                                         0, 0, 1, 0, [{
+	                                                 offset: 0,
+	                                                 color: 'rgba(255,255,255,0)',
+	                                             },
+	                                             {
+	                                                 offset: 1,
+	                                                 color: 'white',
+	                                             }
+	                                         ]
+	                                     )
+	                                 ],
+	                                 [
+	                                     1, 'rgba(255,255,255, 0)'
+	                                 ]
+	                             ]
+	                         }
+	                     },
+	                     axisTick: {
+	                         show: 0,
+	                     },
+	                     splitLine: {
+	                         show: 0,
+	                     },
+	                     axisLabel: {
+	                         show: 0
+	                     },
+	                     pointer: {
+	                         show: 0,
+	                     },
+	                     detail: {
+	                         show: 0
+	                     },
+	                     data: [{
+	                         value: item.value,
+	                     }]
+	                 },
+	                 // 外围刻度
+	                 {
+	                     type: 'gauge',
+	                     center: item.pos,
+	                     radius: '50%', // 1行3个
+	                     splitNumber: item.splitNum || 10,
+	                     min: 0,
+	                     max: 100,
+	                     startAngle: 225,
+	                     endAngle: -45,
+	                     axisLine: {
+	                         show: true,
+	                         lineStyle: {
+	                             width: 1,
+	                             color: [
+	                                 [1, 'rgba(0,0,0,0)']
+	                             ]
+	                         }
+	                     }, //仪表盘轴线
+	                     axisTick: {
+	                         show: true,
+	                         lineStyle: {
+	                             color: 'rgba(255,255,255,0.6)',
+	                             width: 1
+	                         },
+	                         length: -6
+	                     }, //刻度样式
+	                     splitLine: {
+	                         show: true,
+	                         length: 10,
+	                         lineStyle: {
+	                             color: 'rgba(255,255,255,0.6)'
+	                         }
+	                     }, //分隔线样式
+	                     axisLabel: {
+	                         show: true,
+	                         distance: 2,
+	                         textStyle: {
+	                             color: highlight,
+	                             fontSize: '6',
+	                             fontWeight: 'bold'
+	                         }
+	                     },
+	                     pointer: {
+	                         show: 0
+	                     },
+	                     detail: {
+	                         show: 0
+	                     }
+	                 },
+
+	                 // 内侧指针、数值显示
+	                 {
+	                     name: item.name,
+	                     type: 'gauge',
+	                     center: item.pos,
+	                     radius: '54%',
+	                     startAngle: 225,
+	                     endAngle: -45,
+	                     min: 0,
+	                     max: 100,
+	                     axisLine: {
+	                         show: true,
+	                         lineStyle: {
+	                             width: 20,
+	                             color: [
+	                                 [
+	                                     item.value / 100, new echarts.graphic.LinearGradient(
+	                                         0, 0, 1, 0, [{
+	                                                 offset: 0,
+	                                                 color: 'rgba(0,0,0, 0)',
+	                                             },
+	                                             {
+	                                                 offset: 1,
+	                                                 color: item.colorb,
+	                                             }
+	                                         ]
+	                                     )
+	                                 ],
+	                                 [
+	                                     1, 'rgba(255,255,255, 0)'
+	                                 ]
+	                             ]
+	                         }
+	                     },
+	                     axisTick: {
+	                         show: 0,
+	                     },
+	                     splitLine: {
+	                         show: 0,
+	                     },
+	                     axisLabel: {
+	                         show: 0
+	                     },
+	                     pointer: {
+	                         show: true,
+	                         length: '102%',
+	                         width: 3
+	                     },
+	                     title: {
+	                         show: true,
+	                         offsetCenter: [0, '65%'],
+	                         color: 'white',
+	                         fontSize: 8,
+	                         /* backgroundColor: "#D8d8d8",*/
+	                         borderRadius: 21,
+	                         padding: 5
+	                     },
+	                     detail: {
+	                         show: true,
+	                         offsetCenter: [0, 0],
+	                         textStyle: {
+	                             fontSize: 12,
+	                             color: '#fff'
+	                         },
+	                         formatter: [
+	                             '{value}' + (item.unit || ''),
+	                             /* '{name|' + item.name + '}'*/
+	                         ].join('\n'),
+
+	                         rich: {
+	                             name: {
+	                                 fontSize: 8,
+	                                 lineHeight: 10,
+	                                 color: '#ddd',
+	                                 padding: [30, 0, 0, 0]
+	                             }
+	                         }
+	                     },
+	                     itemStyle: {
+	                         normal: {
+	                             color: highlight,
+	                         }
+	                     },
+	                     data: [{
+	                         value: item.value,
+	                         name: item.name
+	                     }]
+	                 }
+	             );
+	         });
+	         return result;
+	     })()
+	 };
+	 
+	 
+	 var optionWind={
+			    backgroundColor:'#0A1651',
+			    tooltip: {
+			        trigger: 'axis',
+			        axisPointer: {
+			            lineStyle: {
+			                color: '#57617B'
+			            }
+			        }
+			    },
+			    legend: {
+			        icon: 'diamond',
+			        itemGap: 13,
+			        data: ['风速 m/s'],
+			        bottom:'80%',
+			        textStyle: {
+			            fontSize: 12,
+			            color: '#F1F1F3'
+			        }
+			    },
+			    grid: {
+			        bottom:'10%'
+			    },
+			    xAxis: [{
+			        type: 'category',
+			        boundaryGap: false,
+			        axisLine: {
+			            lineStyle: {
+			                color: '#57617B'
+			            }
+			        },
+			        data: windDataX,
+			    }],
+			    yAxis: [{
+			        type: 'value',
+			        axisTick: {
+			            show: false
+			        },
+			        axisLine: {
+			            lineStyle: {
+			                color: '#57617B'
+			            }
+			        },
+			        axisLabel: {
+			            margin: 10,
+			            textStyle: {
+			                color: "rgba(255,255,255,.6)",
+			                fontSize: '12',
+			            }
+			        },
+			        splitLine: {
+			            lineStyle: {
+			                color: "rgba(255,255,255,0.1)",
+			            }
+			        }
+			    }],
+			    series: [{
+			        name: '风速 m/s',
+			        type: 'line',
+			        smooth: true,
+			        markLine:{ //最大值和最小值
+			    	data:[
+			    	{
+			    		type:"min",name:"最小值"
+			    
+			    	},
+			    	{
+			    		type:"max",name:"最大值"
+			    	}]
+			        },
+			        lineStyle: {
+			            normal: {
+			                width: 1
+			            }
+			        },
+			        itemStyle: {
+			            normal: {
+			                color:'#00A1EA'
+			            }
+			        },
+			        data: windDataY
+			    },  ]
+
+			};	
+		var optionPower={
+			    backgroundColor:'#0A1651',
+			    tooltip: {
+			        trigger: 'axis',
+			        axisPointer: {
+			            lineStyle: {
+			                color: '#57617B'
+			            }
+			        }
+			    },
+			    legend: {
+			        icon: 'diamond',
+			        itemGap: 13,
+			        data: ['功率 kW'],
+			        bottom:'80%',
+			        
+			        textStyle: {
+			            fontSize: 12,
+			            color: '#F1F1F3'
+			        }
+			    },
+			    grid: {
+			        bottom:'10%'
+			    },
+			    xAxis: [{
+			        type: 'category',
+			        boundaryGap: false,
+			        axisLine: {
+			            lineStyle: {
+			                color: '#57617B'
+			            }
+			        },
+			        data: powerDataX,
+			    }],
+			    yAxis: [{
+			        type: 'value',
+			        axisTick: {
+			            show: false
+			        },
+			        axisLine: {
+			            lineStyle: {
+			                color: '#57617B'
+			            }
+			        },
+			        axisLabel: {
+			            margin: 10,
+			            textStyle: {
+			                color: "rgba(255,255,255,.6)",
+			                fontSize: '12',
+			            }
+			        },
+			        splitLine: {
+			            lineStyle: {
+			                color: "rgba(255,255,255,0.1)",
+			            }
+			        }
+			    }],
+			    series: [{
+			        name: '功率 kW',
+			        type: 'line',
+			        smooth: true,
+			        markLine:{ //最大值和最小值
+			    	data:[
+			    	{
+			    		type:"min",name:"最小值"
+			    
+			    	},
+			    	{
+			    		type:"max",name:"最大值"
+			    	}]
+			        },
+			        lineStyle: {
+			            normal: {
+			                width: 1
+			            }
+			        },
+			        itemStyle: {
+			            normal: {
+			                color:'#00A1EA'
+			            }
+			        },
+			        data: powerDataY
+			    },  ]
+
+			};		
+	 
+	 
+	 
+			    
+		myChart1.setOption(option1);
+		myChartDay.setOption(option);
+		myChartWind.setOption(optionWind);
+		myChartPower.setOption(optionPower);
+	</script>
+</body>
+</html>

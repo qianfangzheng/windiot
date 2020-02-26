@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('表格数据汇总')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+		    <div class="col-sm-12 search-collapse">
+				<form id="time-form">
+					<div class="select-list">
+						<ul>
+							<li>
+							<label>类型:</label>
+                             <select id="dataType" style="display: inline-block;">
+                                 <option value="dayData">日数据</option>
+                                 <option value="monthData">月数据</option>
+							     <option value="yearData">年数据</option>
+                             </select>
+							</li>
+							<li>
+								<a id="serachBtn" class="btn btn-primary btn-rounded btn-sm data-btn"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <th:block th:include="include :: footer" />
+	<th:block th:include="include :: layout-latest-js" />
+	<th:block th:include="include :: ztree-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "windpower/fanyawSelect";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+        //?dataType="+$("#dataType").val()
+        $(function() {
+            $("#serachBtn").click(function(){
+            	options.url = prefix+"/list?dataType="+$("#dataType").val();
+            	
+            	//$.operate.clean();
+            	$.table.destroy();
+            	$.table.init(options);
+            	
+            })
+            var queryUrl = prefix + "/list?dataType="+$("#dataType").val();
+            var options = {
+                url: queryUrl,
+                smartDisplay: false,
+                showFooter: true,
+		        showSearch: false,
+		        cache: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '序号'
+				},
+				{
+					field : 'createTime', 
+					title : '统计时间'
+				},
+				{
+					field : 'fanId', 
+					title : '风机编号'
+				},
+				{
+					field : 'brand', 
+					title : '风机品牌'
+				},
+				{
+					field : 'power', 
+					title : '风机功率(KW)'
+				},
+				{
+					field : 'leftDriftNum', 
+					title : '左偏航次数'
+				},
+				{
+					field : 'leftDriftAngle', 
+					title : '左偏航角度(°)'
+				},
+				{
+					field : 'rightDriftNum', 
+					title : '右偏航次数'
+				},
+				{
+					field : 'rightDriftAngle', 
+					title : '右偏航角度(°)'
+				}]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

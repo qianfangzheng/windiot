@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('表格数据汇总')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+					<center>风向统计查询</center>
+		    <div class="col-sm-12 search-collapse">
+			    <p class="select-title">时间条件查询</p>
+				<form id="time-form">
+					<div class="select-list">
+						<ul>
+							<li class="select-time">
+								<label>创建时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('time-form')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+							<li>
+								<a class="btn btn-info btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;导出</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "windpower/fanyawSelect";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+		        showFooter: true,
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'userId', 
+					title : '序号'
+				},
+				{
+					field : 'userCode', 
+					title : '统计时间'
+				},
+				{
+					field : 'direction1', 
+					title : '方向1'
+				},
+				{
+					field : 'direction2', 
+					title : '方向2'
+				},
+				{
+					field : 'direction3', 
+					title : '方向3'
+				},
+				{
+					field : 'direction4', 
+					title : '方向4'
+				},
+				{
+					field : 'direction5', 
+					title : '方向5'
+				},
+				{
+					field : 'direction6', 
+					title : '方向6'
+				}]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

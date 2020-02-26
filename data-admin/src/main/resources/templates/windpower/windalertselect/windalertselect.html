@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('表格数据汇总')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+		    <div class="col-sm-12 search-collapse">
+				<form id="time-form">
+					<div class="select-list">
+						<ul>
+							<li class="select-time">
+								<label>创建时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('time-form')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+							<li>
+								<a class="btn btn-info btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;导出</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "windpower/windalertselect";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+		        showFooter: true,
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '序号'
+				},
+				{
+					field : 'create_time', 
+					title : '统计时间'
+				},
+				{
+					field : 'fanId', 
+					title : '风机编号'
+				},
+				{
+					field : 'vaneCount', 
+					title : '叶片故障(次数)'
+				},
+				{
+					field : 'turnCount', 
+					title : '转向故障(次数)'
+				},
+				{
+					field : 'dynamoCount', 
+					title : '发电机故障(次数)'
+				},
+				{
+					field : 'elseCount', 
+					title : '其他故障(次数)'
+				},]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

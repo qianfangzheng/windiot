@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增增删改查测试')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-users-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">用户名：</label>
+                <div class="col-sm-8">
+                    <input name="username" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">密码：</label>
+                <div class="col-sm-8">
+                    <input name="password" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="email" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/users"
+        $("#form-users-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-users-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

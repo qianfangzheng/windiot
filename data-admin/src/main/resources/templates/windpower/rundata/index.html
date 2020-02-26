@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="/css/editor.css"/>
+		<script src="/js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<th:block th:include="include :: header('卡片列表')" />
+		<style type="text/css">
+		.row h1 {
+			font-size: 20px;
+		}
+		
+		.col-sm-2 {
+			padding: 2px;
+			margin-top: 2px;
+		}
+		
+		.ibox {
+			margin: 0 0 1px;
+		}
+		</style>
+</head>
+<body  class="gray-bg">
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="row-fluid">
+				<div class="span8">
+					<div class="row-fluid">
+						<div class="span4">
+			<div class="row">
+			<div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>风机总台数</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.fanCount}"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>总装机容量</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.capacityTotal}"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>发电小时数</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.generatingHours}+'h'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>累计发电量</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.generatingTotal}+'kw'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>平均风速</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgWindSpeed}+'m/s'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>年平均风速</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgWindSpeedYear}+'m/s'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>月平均风速</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgWindSpeedMonth}+'m/s'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>日平均风速</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgWindSpeedDay}+'m/s'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>平均风轮转速</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgRotateSpeed}+'m/s'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>年平均风轮转速</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgRotateSpeedYear}+'m/s'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>月平均风轮转速</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgRotateSpeedMonth}+'m/s'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>日平均风轮转速</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgRotateSpeedDay}+'m/s'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>年发电量</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.generatingCapacityYear}+'kw'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>月发电量</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.generatingCapacityMonth}+'kw'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>日发电量</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.generatingCapacityDay}+'kw'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>日平均功率</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgPowerDay}+'kw'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>月平均功率</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgPowerMonth}+'kw'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>年平均功率</h5>
+                        <h1 class="no-margins"><span th:text="${session?.runDataVo?.avgPowerYear}+'kw'"></span></h1>
+                       	<div class="stat-percent font-bold text-navy"> <div class="stat-percent text-navy"><i class="fa fa-object-group"></i></div></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+		</div>
+	</div>
+				</div>
+				<div class="span4">
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="media">
+								<div class="media-body">
+									 <div id="PowerGR" style="width: 100%;height:300px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="media">
+								<div class="media-body">
+									<div id="windSpeed" style="width: 100%;height:300px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	                // 瞬时发电率折线图PowerGR
+			        // 基于准备好的dom，初始化echarts实例
+			        var myChart1 = echarts.init(document.getElementById('PowerGR'));
+					// 风速折线图windSpeed
+					// 基于准备好的dom，初始化echarts实例
+					var myChart2 = echarts.init(document.getElementById('windSpeed'));
+					
+			        var lineColor = '#2F5384';
+			    	var labelColor = '#74BFE7';
+			    	var fontSize = '10';
+								
+                    // 生成随机数
+					function randomData() {
+					    now = new Date(+now + oneDay);
+					    value = 30 + Math.random() * 21 - 10;
+					    return {
+					        name: now.toString(),
+					        value: [
+					            [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('-'),
+					            Math.round(value)
+					        ]
+					    }
+					}
+
+					var data = [];
+					var data2 = [];// 用于存储统计图的随机数
+					var nowTime = new Date();
+					var now = +new Date(nowTime - 1000 * 60 * 60 * 24 * 200);
+					var oneDay = 24 * 3600 * 1000;
+					var value = Math.random() * 1000;
+					for (var i = 0; i < 100; i++) {
+					    data.push(randomData());
+					    data2.push(randomData());
+					}
+					
+					option1 = {
+							grid: {
+				                left: '5%',
+				                right: '10%',
+				                top: '15%',
+				                bottom: '10%',
+				                containLabel: true
+				            },
+						backgroundColor:'#000',
+					    legend: {
+			                show: true,
+			                x: 'center',
+			                y: '35',
+			                itemWidth: 45,
+			                itemHeight: 18,
+			                textStyle: {
+			                    color: '#fff',
+			                    fontSize: fontSize
+			                },
+			                data: ['瞬时发电功率']
+			            },
+					    tooltip: {
+					        trigger: 'axis',
+					        formatter: function (params) {
+					            params = params[0];
+					            var date = new Date();
+					            return date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+					        },
+					        axisPointer: {
+					            animation: false
+					        }
+					    },
+					    xAxis: {
+					        type: 'time',   
+					        axisLabel: {
+		                        color: labelColor,
+		                        fontSize: fontSize
+		                    },
+		                    axisLine: {
+		                        show: true,
+		                        lineStyle: {
+		                            color: lineColor,
+		                            width: 2
+		                        }
+		                    },
+		                    axisTick: {
+		                        show: false
+		                    },
+		                    splitLine: {
+		                        show: false,
+		                        lineStyle: {
+		                            color: '#195384'
+		                        }
+		                    },
+		                    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+					    },
+					    yAxis: {
+		                    type: 'value',
+		                    name: 'KW',
+		                    nameTextStyle: {
+		                        fontSize: fontSize,
+		                        color:'#fff'
+		                    },
+		                    axisLabel: {
+		                        formatter: '{value}',
+		                        textStyle: {
+		                            color: labelColor,
+		                            fontSize: fontSize
+		                        }
+		                    },
+		                    axisLine: {
+		                        lineStyle: {
+		                            color:lineColor,
+		                            width: 2
+		                        }
+		                    },
+		                    axisTick: {
+		                        show: false
+		                    },
+		                    splitLine: {
+		                        show: false,
+		                        lineStyle: {
+		                            color: '#142B57'
+		                        }
+		                    }
+		                },
+					    series: [{
+					    	name: '瞬时发电功率',
+		                    type: 'line',
+		                    stack: '总量',
+					        showSymbol: false,
+					        smooth: true,
+					        hoverAnimation: false,  
+					        data: data,
+					        itemStyle: {
+		                        normal: {
+		                            color: 'rgba(3,240,254,1)',
+		                            lineStyle: {
+		                                color: "rgba(3,240,254,1)",
+		                                width: 2
+		                            },
+		                            areaStyle: {
+		                                //color: '#94C9EC'
+		                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+		                                    offset: 0,
+		                                    color: 'rgba(3,240,254,.7)'
+		                                }, {
+		                                    offset: 1,
+		                                    color: 'rgba(3,240,254,0)'
+		                                }])
+		                            },
+		                            shadowColor:'rgba(3,240,254,1)',
+		                            shadowBlur:20,
+		                        }
+		                    },
+					    }]
+					};
+					
+					
+					option2 = {
+							grid: {
+				                left: '5%',
+				                right: '10%',
+				                top: '15%',
+				                bottom: '10%',
+				                containLabel: true
+				            },
+						backgroundColor:'#000',
+					    legend: {
+			                show: true,
+			                x: 'center',
+			                y: '35',
+			                itemWidth: 45,
+			                itemHeight: 18,
+			                textStyle: {
+			                    color: '#fff',
+			                    fontSize: fontSize
+			                },
+			                data: ['风速']
+			            },
+					    tooltip: {
+					        trigger: 'axis',
+					        formatter: function (params) {
+					            params = params[0];
+					            var date = new Date();
+					            return date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+					        },
+					        axisPointer: {
+					            animation: false
+					        }
+					    },
+					    xAxis: {
+					        type: 'time',   
+					        axisLabel: {
+		                        color: labelColor,
+		                        fontSize: fontSize
+		                    },
+		                    axisLine: {
+		                        show: true,
+		                        lineStyle: {
+		                            color: lineColor,
+		                            width: 2
+		                        }
+		                    },
+		                    axisTick: {
+		                        show: false
+		                    },
+		                    splitLine: {
+		                        show: false,
+		                        lineStyle: {
+		                            color: '#195384'
+		                        }
+		                    },
+		                    data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+					    },
+					    yAxis: {
+		                    type: 'value',
+		                    name: 'M/S',
+		                    nameTextStyle: {
+		                        fontSize: fontSize,
+		                        color:'#fff'
+		                    },
+		                    axisLabel: {
+		                        formatter: '{value}',
+		                        textStyle: {
+		                            color: labelColor,
+		                            fontSize: fontSize
+		                        }
+		                    },
+		                    axisLine: {
+		                        lineStyle: {
+		                            color:lineColor,
+		                            width: 2
+		                        }
+		                    },
+		                    axisTick: {
+		                        show: false
+		                    },
+		                    splitLine: {
+		                        show: false,
+		                        lineStyle: {
+		                            color: '#142B57'
+		                        }
+		                    }
+		                },
+					    series: [{
+					    	name: '风速',
+		                    type: 'line',
+		                    stack: '总量',
+					        showSymbol: false,
+					        smooth: true,
+					        hoverAnimation: false,  
+					        data: data2,
+					        itemStyle: {
+		                        normal: {
+		                            color: 'rgba(3,240,254,1)',
+		                            lineStyle: {
+		                                color: "rgba(3,240,254,1)",
+		                                width: 2
+		                            },
+		                            areaStyle: {
+		                                //color: '#94C9EC'
+		                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+		                                    offset: 0,
+		                                    color: 'rgba(3,240,254,.7)'
+		                                }, {
+		                                    offset: 1,
+		                                    color: 'rgba(3,240,254,0)'
+		                                }])
+		                            },
+		                            shadowColor:'rgba(3,240,254,1)',
+		                            shadowBlur:20,
+		                        }
+		                    },
+					    }]
+					};
+                    //  定时器让图像动态起来
+					/* setInterval(function () {
+
+					    for (var i = 0; i < 1; i++) {
+					        data.shift();
+					        data2.shift();
+					        data.push(randomData());
+					        data2.push(randomData());
+					    }
+
+					    myChart1.setOption({
+					        series: [{
+					            data: data
+					        }]
+					    });
+					    
+					    myChart2.setOption({
+					        series: [{
+					            data: data2
+					        }]
+					    });
+					}, 1000); */
+					
+					
+								
+					// 使用刚指定的配置项和数据显示图表。
+					myChart1.setOption(option1);
+					myChart2.setOption(option2);
+			    </script>
+		<script src="/js/h.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

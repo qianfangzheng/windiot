@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('百度ECharts')" />
+<script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+<script src="/js/jquery-2.0.0.min.js" type="text/javascript"
+	charset="utf-8"></script>
+<script src="/js/bootstrap.min.js" type="text/javascript"
+	charset="utf-8"></script>
+<script src="/js/bootstrap-paginator.js" type="text/javascript"
+	charset="utf-8"></script>
+<style type="text/css">
+.echarts {
+	width: 360px;
+	height: 360px;
+}
+
+.col-md-5ths {
+	padding: 1px;
+}
+
+.row {
+	padding: 5px;
+}
+
+.matrix {
+	padding: 5px 5px 5px 5px;
+}
+
+#div1 {
+	margin: 1 1 1 1;
+}
+
+.ibox {
+	margin: 0 0 10px;
+}
+
+.fname {
+	
+	font-size: 8px;
+}
+
+.fvalue {
+	font-size: 8px;
+	color: blue;
+}
+
+.funit {
+	font-size: 8px;
+	font-style: oblique;
+	color: #f07f39;
+}
+
+tbody>tr:hover {
+	background-color: wheat !important;
+}
+
+tbody>tr td {
+	padding: 1px;
+}
+</style>
+</head>
+<body class="gray-bg">
+	<th:block th:include="include :: datatotal" />
+
+	<div id="div1">在这里</div>
+	<!--  
+		<div class="pull-right pagination"><ul id="page"></ul></div>
+		-->
+
+	<script th:inline="javascript">
+/*     var json11 = {
+    		"direction": 0,
+    		"params": '',
+    		"windSpeed": 0,
+    		"test":111,
+    		}; */
+	if(typeof(WebSocket) == "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+    }else{
+        console.log("您的浏览器支持WebSocket");
+        //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+        //等同于
+        index = new WebSocket("ws://tenddb.zsis.net:8080/websocket/25565");
+        //socket = new WebSocket("${basePath}websocket/${cid}".replace("http","ws"));
+        //打开事件
+        index.onopen = function() {
+            console.log("Socket 已打开");
+            index.send("这是来自客户端的消息" + location.href + new Date());
+        };
+        //获得消息事件
+        index.onmessage = function(msg) {
+        	var reg = new RegExp('"',"g");
+        	var json12 = JSON.parse(msg.data);
+            //发现消息进入    开始处理前端触发逻辑
+            $(".em_windspeed").text(json12.bizFanSpeed.windSpeed);
+            $(".em_direction").text(json12.bizFanSpeed.direction);
+            // 遍历box 查询编号
+            $(".ibox").each(function(){
+            	if($(this).find(".em_status").text() == "运行中"){
+            		$(this).find(".em_instantaneousPower").text(json12[$(this).find(".fan_code").text()].instantaneousPower);
+            		$(this).find(".em_rotateSpeed").text(json12[$(this).find(".fan_code").text()].rotateSpeed);
+            	}
+            })
+        };
+        //关闭事件
+        index.onclose = function() {
+            console.log("Socket已关闭");
+        };
+        //发生了错误事件
+        index.onerror = function() {
+            alert("Socket发生了错误");
+            //此时可以尝试刷新页面
+        }
+    }
+	function pagehtml(pageNum) {
+	
+		 if (pageNum == 0){
+		  pageNum=1;
+		 } else {
+		  pageNum=pageNum;
+		 }
+    $.ajax({
+        url: "/windpower/fanmatrix/list",
+        type: "POST",
+        data: {
+            pageSize: 9999,
+            pageNum: pageNum
+        },
+        async:false,
+        success: function(data) {
+            // data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
+            $("#div1").empty();
+            for(i=0;i<data.rows.length;i++){
+            if(i%5==0 && i >4){
+            	
+               	$("#div1").append("</div>");
+               	$("#div1").append("<div class='row'>");
+            }
+           	if(i==0){
+           		$("#div1").append("<div class='row'>");
+           	}
+            var row = data.rows[i];
+            var img = '/img/fan_fail.png';
+            var color = '#f00;'
+            var status = '故障';
+            
+            if(row.status==1){
+            	img = '/img/fan.gif';
+            	color = '#30b60e;';
+            	status = '运行中';
+            }else if(row.status==0){
+            	img = '/img/fan_stop.png';
+            	color = '#444444;';
+            	status = '停止';
+            }else{
+            	img = '/img/fan_fail.png';
+            	color = '#f00;';
+            	status = '故障';
+            }
+            
+            var instantaneousPower = row.status==1?row.instantaneousPower:'--';
+            var rotateSpeed = row.status==1?row.rotateSpeed:'--';
+            
+            var options = {
+            	    alignment:"center",//居中显示
+            	　　　　　　　　　　currentPage: pageNum,//当前页数
+            	　　　　　　　　　　totalPages: Math.ceil(data.total/2),//总页数 注意不是总条数,
+            		bootstrapMajorVersion: 3,
+            	　　　　　　　　　　pageUrl: function(type, page, current){
+            	     if (page==current) {
+            	      return "javascript:void(0)";
+            	     } else {
+            	      return "javascript:pagehtml("+page+")";
+            	     }
+            	    }
+            	   };
+            
+            $("#div1").append("\n" +
+                "                <div class='col-md-5ths'>\n" +
+                "                <div class='ibox '>\n" +
+                "                <div class='ibox-title'>\n" +
+                "                <h5 class='dayDetailedBtn'>风机: <b class='fan_code'>"+row.fanCode+"</b></h5>\n" +
+                "<div class='ibox-tools'>\n" +
+                "	<a class='close-link'>\n" +
+                "    	<em class='em_status'>"+status+"</em> <i class='fa fa-lightbulb-o' style='color:"+color+"'></i>\n" +
+                "	</a>\n" +
+            	"</div>\n" +
+                "            </div>\n" +
+                "            <div class='ibox-content matrix'>\n" +
+                "                <div class='media'>\n" +
+                "\n" +
+                "                <a class='media-left' href='faninfo?fanId="+row.id+"'>\n" +
+                "                <img src='"+img+"' alt='' style='max-height: 115px; max-width: 80px;' >\n" +
+                "                </a>\n" +
+                "\n" +
+                "                <div class='media-right'>\n" +
+                "                <table><tbody>\n" +
+                "                <tr>\n" +
+                "                <td class='fname'>\n" +
+                "                	功率：\n" +
+                "                </td>\n" +
+                "            	 <td class='fvalue'>\n" +
+                "                <em>"+row.power+"</em>\n" +
+                "                </td>\n" +
+                "            	 <td class='funit'>\n" +
+                "                <em> kw </em>\n" +
+                "                </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                <td class='fname'>\n" +
+                "                	实际功率：\n" +
+                "                </td>\n" +
+                "            <td class='fvalue'>\n" +
+                "                <em>"+row.realPower+"</em>\n" +
+                "                </td>\n" +
+                "            	 <td class='funit'>\n" +
+                "                <em> kw </em>\n" +
+                "                </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                <td class='fname'>\n" +
+                "               	 瞬时功率：\n" +
+                "                </td>\n" +
+                "            <td class='fvalue'>\n" +
+                "                <em class='em_instantaneousPower'>"+instantaneousPower+"</em>\n" +
+                "                </td>\n" +
+                "            	 <td class='funit'>\n" +
+                "                <em> kw </em>\n" +
+                "                </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                <td class='fname'>\n" +
+                "                	风轮转速：\n" +
+                "                </td>\n" +
+                "            <td class='fvalue'>\n" +
+                "                <em class='em_rotateSpeed'>"+rotateSpeed+"</em>\n" +
+                "                </td>\n" +
+                "            	 <td class='funit'>\n" +
+                "                <em> 转/S </em>\n" +
+                "                </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                <td class='fname'>\n" +
+                "                	风速：\n" +
+                "                </td>\n" +
+                "            <td class='fvalue'>\n" +
+                "                <em class='em_windspeed'></em>\n" +
+                "                </td>\n" +
+                "            	 <td class='funit'>\n" +
+                "                <em> M/S </em>\n" +
+                "                </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                <td class='fname'>\n" +
+                "                	风向角：\n" +
+                "                </td>\n" +
+                "            <td class='fvalue'>\n" +
+                "                <em class='em_direction'>"+row.direction+"</em>\n" +
+                "                </td>\n" +
+                "            	 <td class='funit'>\n" +
+                "                <em> ° </em>\n" +
+                "                </td>\n" +
+                "                </tr>\n" +
+                "                </tbody>\n" +
+                "                </table>\n" +
+                "                </div>\n" +
+                "                </div>\n" +
+                "                </div>\n" +
+                "                </div>\n" +
+                "                </div>");
+            }
+            if(i==data.rows.length-1){
+           		$("#div1").append("</div>");
+           	}
+            options1 = {
+                    currentPage: 1,
+                    numberOfPages: 5,
+                    totalPages:11,
+                    bootstrapMajorVersion: 3
+                }
+            $("#page").bootstrapPaginator(options);
+
+        }
+    });
+	}
+	pagehtml(1);
+	
+	
+
+</script>
+</body>
+</html>

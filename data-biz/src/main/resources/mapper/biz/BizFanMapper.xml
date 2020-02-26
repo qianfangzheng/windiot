@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizFanMapper">
+    
+    <resultMap type="com.data.biz.domain.BizFan" id="BizFanResult">
+        <result property="id"    column="id"    />
+        <result property="fanCode"    column="fan_code"    />
+        <result property="brand"    column="brand"    />
+        <result property="power"    column="power"    />
+        <result property="realPower"    column="real_power"    />
+        <result property="coordinates"    column="coordinates"    />
+        <result property="powerPlantId"    column="power_plant_id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="installTime"    column="install_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+    <resultMap type="com.data.biz.domain.BizFanMatrix" id="BizFanMatrixResult">
+        <result property="id"    column="id"    />
+        <result property="fanCode"    column="fan_code"    />
+        <result property="brand"    column="brand"    />
+        <result property="power"    column="power"    />
+        <result property="realPower"    column="real_power"    />
+        <result property="status"    column="status"    />
+        <result property="direction"    column="direction"    />
+        <result property="windSpeed"    column="wind_speed"    />
+        <result property="rotateSpeed"    column="rotate_speed"    />
+        <result property="instantaneousPower"    column="instantaneous_power"    />
+    </resultMap>
+
+    <resultMap type="com.data.biz.vo.FanListVo" id="fanListVoMap">
+       <result property="id" column="id" />
+       <result property="fanCode" column="fan_code" />
+       <result property="power" column="power" />
+       <result property="realPower" column="real_power" />
+       <result property="instantaneous_power" column="instantaneous_power" />
+       <result property="rotate_speed" column="rotate_speed" />
+       <result property="direction" column="direction" />
+       <result property="create_time" column="create_time" />
+       <result property="status" column="fan_status" />
+    </resultMap>
+    
+    <resultMap type="com.data.biz.dto.FanDetailStatisticsDTO" id="FanDetailStatisticsDTOMap">
+    <result column="sumelectric" property="sumelectric"/>
+    <result column="faultCount" property="faultCount"/>
+    <result column="yawCount" property="yawCount"/>
+    </resultMap>
+    
+	<sql id="selectBizFanVo">
+		select id, fan_code, brand, power, real_power, coordinates, power_plant_id,
+		start_time, install_time, create_time, status from biz_fan
+	</sql>
+
+    <select id="selectFanGeneratingHours" parameterType="long">
+    SELECT hour(timediff(NOW(),start_time))+minute(timediff(NOW(),start_time))/60 FROM biz_fan WHERE id = #{fanId}
+    </select>
+
+	<select id="countBizFan" resultType="int">
+		select COUNT(id) from biz_fan where power_plant_id = #{ppId}
+	</select>
+	
+    <select id="selectBizFanList" parameterType="BizFan" resultMap="BizFanResult">
+        <include refid="selectBizFanVo"/>
+        <where>  
+            <if test="fanCode != null  and fanCode != ''"> and fan_code = #{fanCode}</if>
+            <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
+            <if test="power != null "> and power = #{power}</if>
+            <if test="realPower != null "> and real_power = #{realPower}</if>
+            <if test="coordinates != null  and coordinates != ''"> and coordinates = #{coordinates}</if>
+            <if test="powerPlantId != null "> and power_plant_id = #{powerPlantId}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="installTime != null "> and install_time = #{installTime}</if>
+            <if test="status != null "> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizFanById" parameterType="Long" resultMap="BizFanResult">
+        <include refid="selectBizFanVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizFan" parameterType="BizFan">
+        insert into biz_fan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="fanCode != null  and fanCode != ''">fan_code,</if>
+            <if test="brand != null  and brand != ''">brand,</if>
+            <if test="power != null ">power,</if>
+            <if test="realPower != null ">real_power,</if>
+            <if test="coordinates != null  and coordinates != ''">coordinates,</if>
+            <if test="powerPlantId != null ">power_plant_id,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="installTime != null ">install_time,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="status != null ">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="fanCode != null  and fanCode != ''">#{fanCode},</if>
+            <if test="brand != null  and brand != ''">#{brand},</if>
+            <if test="power != null ">#{power},</if>
+            <if test="realPower != null ">#{realPower},</if>
+            <if test="coordinates != null  and coordinates != ''">#{coordinates},</if>
+            <if test="powerPlantId != null ">#{powerPlantId},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="installTime != null ">#{installTime},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="status != null ">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizFan" parameterType="BizFan">
+        update biz_fan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fanCode != null  and fanCode != ''">fan_code = #{fanCode},</if>
+            <if test="brand != null  and brand != ''">brand = #{brand},</if>
+            <if test="power != null ">power = #{power},</if>
+            <if test="realPower != null ">real_power = #{realPower},</if>
+            <if test="coordinates != null  and coordinates != ''">coordinates = #{coordinates},</if>
+            <if test="powerPlantId != null ">power_plant_id = #{powerPlantId},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="installTime != null ">install_time = #{installTime},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="status != null ">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizFanById" parameterType="Long">
+        delete from biz_fan where id = #{id}
+    </delete>
+
+    <delete id="deleteBizFanByIds" parameterType="String">
+        delete from biz_fan where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+	<select id="listFanListVos" parameterType="long" resultMap="fanListVoMap">
+		SELECT f.id as id,
+        f.fan_code as fan_code,
+        f.brand,
+        f.power as power,
+        f.real_power as real_power,
+		f.start_time as start_time,
+		f.install_time as install_time,
+		f.create_time as create_time,
+		c.instantaneous_power as instantaneous_power,
+		c.rotate_speed as rotate_speed,
+		f.status as fan_status,
+		(select s.direction FROM biz_fan_speed s ORDER BY create_time desc limit 1) AS direction, 
+		(select s.wind_speed FROM biz_fan_speed s ORDER BY create_time desc limit 1) AS wind_speed,
+		c.rotate_speed
+		FROM biz_fan f
+		LEFT JOIN (select create_time,instantaneous_power,SUBSTRING_INDEX(group_concat(fan_id order by `create_time` desc),',',1) as fan_id,
+		SUBSTRING_INDEX(group_concat(rotate_speed order by `create_time` desc),',',1) as rotate_speed 
+		from biz_cabin group by fan_id) c on c.fan_id=f.id WHERE power_plant_id = #{ppId}
+	</select>
+	
+	<select id="listFanCode" resultType="int" parameterType="long">
+	select fan_code from biz_fan where power_plant_id = #{ppId}
+	</select>
+    
+    <select id="getFanMatrix" parameterType="com.data.biz.domain.BizFanMatrix"  resultMap="BizFanMatrixResult">
+    SELECT
+	f.id,
+	f.fan_code,
+	f.brand,
+	f.power,
+	f.real_power,
+	f.start_time,
+	f.install_time,
+	f.create_time,
+	f.STATUS,
+	( SELECT s.direction FROM biz_fan_speed s ORDER BY create_time DESC LIMIT 1 ) AS direction,
+	( SELECT s.wind_speed FROM biz_fan_speed s ORDER BY create_time DESC LIMIT 1 ) AS wind_speed,
+	c.rotate_speed,
+	c.instantaneous_power
+FROM
+	biz_fan f
+	LEFT JOIN (
+	SELECT
+		SUBSTRING_INDEX( group_concat( fan_id ORDER BY `create_time` DESC ), ',', 1 ) AS fan_id,
+		SUBSTRING_INDEX( group_concat( rotate_speed ORDER BY `create_time` DESC ), ',', 1 ) AS rotate_speed,
+		SUBSTRING_INDEX( group_concat( instantaneous_power ORDER BY `create_time` DESC ), ',', 1 ) AS instantaneous_power
+	FROM
+		biz_cabin 
+	GROUP BY
+		fan_id 
+	) c ON c.fan_id = f.id 
+WHERE
+	f.power_plant_id = #{plantId}
+    </select>
+    
+    <select id="getFanById" parameterType="long" resultMap="BizFanResult">
+    SELECT * FROM biz_fan WHERE id = #{fanId}
+    </select>
+    
+    <select id="getFanDetailStatisticsDTO" parameterType="long" resultMap="FanDetailStatisticsDTOMap">
+    SELECT 
+    (SUM(left_drift_num)+SUM(right_drift_num)) as yawCount,
+    SUM(power_generation) as sumelectric,
+    (SELECT COUNT(fan_id) FROM biz_fan_failure WHERE fan_id = #{fanId}) as faultCount
+    FROM biz_fan_datatotal_day WHERE fan_id = #{fanId}
+    </select>
+    
+</mapper>

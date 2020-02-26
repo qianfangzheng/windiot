@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('百度ECharts')" />
+<script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+<style type="text/css">
+.echarts {
+	height: 331.6px;
+}
+
+.fvalue {
+	color: blue;
+}
+
+.funit {
+	color: #f07f39;
+}
+
+tbody>tr {
+	hight: 50px;
+}
+
+tbody>tr:hover {
+	background-color: wheat !important;
+}
+</style>
+</head>
+<body class="gray-bg">
+
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>昨日日平均风速数据统计 m/s</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="row show-grid">
+							<table class="table">
+								<tbody>
+									<tr>
+										<td class="fname">北方向</td>
+										<td class="fvalue" th:text="${dayData1.northSpeed}">data</td>
+										<td class="fname">北东北方向</td>
+										<td class="fvalue" th:text="${dayData1.nneSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东北方向</td>
+										<td class="fvalue" th:text="${dayData1.northeastSpeed}">data</td>
+										<td class="fname">东东北方向</td>
+										<td class="fvalue" th:text="${dayData1.eneSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东方向</td>
+										<td class="fvalue" th:text="${dayData1.eastSpeed}">data</td>
+										<td class="fname">东东南方向</td>
+										<td class="fvalue" th:text="${dayData1.eseSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东南方向</td>
+										<td class="fvalue" th:text="${dayData1.southeastSpeed}">data</td>
+										<td class="fname">南东南方向</td>
+										<td class="fvalue" th:text="${dayData1.sseSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">南方向</td>
+										<td class="fvalue" th:text="${dayData1.southSpeed}">data</td>
+										<td class="fname">南西南方向</td>
+										<td class="fvalue" th:text="${dayData1.sswSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西南方向</td>
+										<td class="fvalue" th:text="${dayData1.southwestSpeed}">data</td>
+										<td class="fname">西西南方向</td>
+										<td class="fvalue" th:text="${dayData1.wswSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西方向</td>
+										<td class="fvalue" th:text="${dayData1.westSpeed}">data</td>
+										<td class="fname">西西北方向</td>
+										<td class="fvalue" th:text="${dayData1.wnwSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西北方向</td>
+										<td class="fvalue" th:text="${dayData1.northwestSpeed}">data</td>
+										<td class="fname">北西北方向</td>
+										<td class="fvalue" th:text="${dayData1.nnwSpeed}">data</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>昨日风速玫瑰图</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="echarts" id="main-day"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>上月平均风速数据统计 m/s</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="row show-grid">
+							<table class="table">
+								<tbody>
+									<tr>
+										<td class="fname">北方向</td>
+										<td class="fvalue" th:text="${monthData1.northSpeed}">data</td>
+										<td class="fname">北东北方向</td>
+										<td class="fvalue" th:text="${monthData1.nneSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东北方向</td>
+										<td class="fvalue" th:text="${monthData1.northeastSpeed}">data</td>
+										<td class="fname">东东北方向</td>
+										<td class="fvalue" th:text="${monthData1.eneSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东方向</td>
+										<td class="fvalue" th:text="${monthData1.eastSpeed}">data</td>
+										<td class="fname">东东南方向</td>
+										<td class="fvalue" th:text="${monthData1.eseSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东南方向</td>
+										<td class="fvalue" th:text="${monthData1.southeastSpeed}">data</td>
+										<td class="fname">南东南方向</td>
+										<td class="fvalue" th:text="${monthData1.sseSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">南方向</td>
+										<td class="fvalue" th:text="${monthData1.southSpeed}">data</td>
+										<td class="fname">南西南方向</td>
+										<td class="fvalue" th:text="${monthData1.sswSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西南方向</td>
+										<td class="fvalue" th:text="${monthData1.southwestSpeed}">data</td>
+										<td class="fname">西西南方向</td>
+										<td class="fvalue" th:text="${monthData1.wswSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西方向</td>
+										<td class="fvalue" th:text="${monthData1.westSpeed}">data</td>
+										<td class="fname">西西北方向</td>
+										<td class="fvalue" th:text="${monthData1.wnwSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西北方向</td>
+										<td class="fvalue" th:text="${monthData1.northwestSpeed}">data</td>
+										<td class="fname">北西北方向</td>
+										<td class="fvalue" th:text="${monthData1.nnwSpeed}">data</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>上月风速玫瑰图</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="echarts" id="main-month"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>上年平均风速数据统计 m/s</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="row show-grid">
+							<table class="table">
+								<tbody>
+									<tr>
+										<td class="fname">北方向</td>
+										<td class="fvalue" th:text="${yearData1.northSpeed}">data</td>
+										<td class="fname">北东北方向</td>
+										<td class="fvalue" th:text="${yearData1.nneSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东北方向</td>
+										<td class="fvalue" th:text="${yearData1.northeastSpeed}">data</td>
+										<td class="fname">东东北方向</td>
+										<td class="fvalue" th:text="${yearData1.eneSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东方向</td>
+										<td class="fvalue" th:text="${yearData1.eastSpeed}">data</td>
+										<td class="fname">东东南方向</td>
+										<td class="fvalue" th:text="${yearData1.eseSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">东南方向</td>
+										<td class="fvalue" th:text="${yearData1.southeastSpeed}">data</td>
+										<td class="fname">南东南方向</td>
+										<td class="fvalue" th:text="${yearData1.sseSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">南方向</td>
+										<td class="fvalue" th:text="${yearData1.southSpeed}">data</td>
+										<td class="fname">南西南方向</td>
+										<td class="fvalue" th:text="${yearData1.sswSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西南方向</td>
+										<td class="fvalue" th:text="${yearData1.southwestSpeed}">data</td>
+										<td class="fname">西西南方向</td>
+										<td class="fvalue" th:text="${yearData1.wswSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西方向</td>
+										<td class="fvalue" th:text="${yearData1.westSpeed}">data</td>
+										<td class="fname">西西北方向</td>
+										<td class="fvalue" th:text="${yearData1.wnwSpeed}">data</td>
+									</tr>
+									<tr>
+										<td class="fname">西北方向</td>
+										<td class="fvalue" th:text="${yearData1.northwestSpeed}">data</td>
+										<td class="fname">北西北方向</td>
+										<td class="fvalue" th:text="${yearData1.nnwSpeed}">data</td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>上年风速玫瑰图</h5>
+						<div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown"
+								href="graph_flot.html#"> <i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="graph_flot.html#">选项1</a></li>
+								<li><a href="graph_flot.html#">选项2</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div class="echarts" id="main-year"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+    	var data = {
+    			dayData: {
+    				eastTime: 0,
+    			    westTime: 0,
+    			    southTime: 0,
+    			    northTime: 0,
+    			    neTime: 0,
+    			    nneTime: 0,
+    			    eneTime: 0,
+    			    nwTime: 0,
+    			    nnwTime: 0,
+    			    wnwTime: 0,
+    			    seTime: 0,
+    			    sseTime: 0,
+    			    eseTime: 0,
+    			    swTime: 0,
+    			    sswTime: 0,
+    			    wswTime: 0,
+    			}
+    	};
+    	//<![CDATA[
+    	var dayData = [[${dayData}]];
+    	var monthData = [[${monthData}]];
+    	var yearData = [[${yearData}]];
+    	//]]>
+        // 基于准备好的dom，初始化echarts实例
+        var myChartDay = echarts.init(document.getElementById('main-day'));
+        var myChartMonth = echarts.init(document.getElementById('main-month'));
+        var myChartYear = echarts.init(document.getElementById('main-year'));
+        // 指定图表的配置项和数据
+        var optionDay = {
+        			    color: ['#70e7ef', '#3a64e9', '#f34646', '#e43185', '#b53edd', '#cddc39', '#ff9800'],
+        			    title: {
+        			        text: '',
+        			        x: 'center',
+        			        textStyle: {
+        			            color: '#30465D',
+        			            fontSize: '14',
+        			            fontWeight: 'bold'
+        			        }
+        			    },
+        			    angleAxis: {
+        			        type: 'category',
+        			        data: ["北", "北东北", "东北", "东东北", "东", "东东南", "东南", "南东南", "南", "南西南", "西南", "西西南", "西", "西西北", "西北", "北西北"],
+        			        boundaryGap: false,
+        			        axisTick: {
+        			            alignWithLabel: true
+        			        },
+        			        axisLine: {
+        			            lineStyle: {
+        			                color: '#30465D'
+        			            }
+        			        },
+        			        splitLine: {
+        			            show: true
+        			        }
+        			    },
+        			    radiusAxis: {
+        			        axisLine: {
+        			            show: false
+        			        },
+        			        axisTick: {
+        			            show: false
+        			        },
+        			        axisLabel: {
+        			            formatter: '{value}%',
+        			            showMaxLabel: false,
+        			            color: '#30465D'
+        			        },
+        			        z: 10
+        			    },
+        			    tooltip: {},
+        			    polar: {},
+        			    legend: {
+        			        show: true,
+        			        right: 0,
+        			        bottom: 0,
+        			        type: 'scroll',
+        			        orient: 'vertical',
+        			        data: ['0.5m/s', '0.5-2m/s', '2-4m/s', '4-6m/s', '6-8m/s', '8-10m/s', '>10m/s']
+        			    },
+        			    series: [{
+        			        type: 'bar',
+        			        data: [dayData[0].northTime,dayData[0].nneTime, dayData[0].neTime, dayData[0].eneTime,dayData[0].eastTime, dayData[0].eseTime, dayData[0].seTime, dayData[0].sseTime, dayData[0].southTime, dayData[0].sswTime, dayData[0].swTime, dayData[0].wswTime, dayData[0].westTime, dayData[0].wnwTime, dayData[0].nwTime,  dayData[0].nnwTime],
+        			        coordinateSystem: 'polar',
+        			        name: '0.5m/s',
+        			        stack: 'a'
+        			    }, {
+        			        type: 'bar',
+        			        data: [dayData[1].northTime,dayData[1].nneTime, dayData[1].neTime, dayData[1].eneTime,dayData[1].eastTime, dayData[1].eseTime, dayData[1].seTime, dayData[1].sseTime, dayData[1].southTime, dayData[1].sswTime, dayData[1].swTime, dayData[1].wswTime, dayData[1].westTime, dayData[1].wnwTime, dayData[1].nwTime,  dayData[1].nnwTime],
+        			        coordinateSystem: 'polar',
+        			        name: '0.5-2m/s',
+        			        stack: 'a'
+        			    }, {
+        			        type: 'bar',
+        			        data: [dayData[2].northTime,dayData[2].nneTime, dayData[2].neTime, dayData[2].eneTime,dayData[2].eastTime, dayData[2].eseTime, dayData[2].seTime, dayData[2].sseTime, dayData[2].southTime, dayData[2].sswTime, dayData[2].swTime, dayData[2].wswTime, dayData[2].westTime, dayData[2].wnwTime, dayData[2].nwTime,  dayData[2].nnwTime],
+        			        coordinateSystem: 'polar',
+        			        name: '2-4m/s',
+        			        stack: 'a'
+        			    }, {
+        			        type: 'bar',
+        			        data: [dayData[3].northTime,dayData[3].nneTime, dayData[3].neTime, dayData[3].eneTime,dayData[3].eastTime, dayData[3].eseTime, dayData[3].seTime, dayData[3].sseTime, dayData[3].southTime, dayData[3].sswTime, dayData[3].swTime, dayData[3].wswTime, dayData[3].westTime, dayData[3].wnwTime, dayData[3].nwTime,  dayData[3].nnwTime],
+        			        coordinateSystem: 'polar',
+        			        name: '4-6m/s',
+        			        stack: 'a'
+        			    }, {
+        			        type: 'bar',
+        			        data: [dayData[4].northTime,dayData[4].nneTime, dayData[4].neTime, dayData[4].eneTime,dayData[4].eastTime, dayData[4].eseTime, dayData[4].seTime, dayData[4].sseTime, dayData[4].southTime, dayData[4].sswTime, dayData[4].swTime, dayData[4].wswTime, dayData[4].westTime, dayData[4].wnwTime, dayData[4].nwTime,  dayData[4].nnwTime],
+        			        coordinateSystem: 'polar',
+        			        name: '6-8m/s',
+        			        stack: 'a'
+        			    }, {
+        			        type: 'bar',
+        			        data: [dayData[5].northTime,dayData[5].nneTime, dayData[5].neTime, dayData[5].eneTime,dayData[5].eastTime, dayData[5].eseTime, dayData[5].seTime, dayData[5].sseTime, dayData[5].southTime, dayData[5].sswTime, dayData[5].swTime, dayData[5].wswTime, dayData[5].westTime, dayData[5].wnwTime, dayData[5].nwTime,  dayData[5].nnwTime],
+        			        coordinateSystem: 'polar',
+        			        name: '8-10m/s',
+        			        stack: 'a'
+        			    }, {
+        			        type: 'bar',
+        			        data: [dayData[6].northTime,dayData[6].nneTime, dayData[6].neTime, dayData[6].eneTime,dayData[6].eastTime, dayData[6].eseTime, dayData[6].seTime, dayData[6].sseTime, dayData[6].southTime, dayData[6].sswTime, dayData[6].swTime, dayData[6].wswTime, dayData[6].westTime, dayData[6].wnwTime, dayData[6].nwTime,  dayData[6].nnwTime],
+        			        coordinateSystem: 'polar',
+        			        name: '>10m/s',
+        			        stack: 'a'
+        			    }]
+        			};
+        var optionMonth = {
+			    color: ['#70e7ef', '#3a64e9', '#f34646', '#e43185', '#b53edd', '#cddc39', '#ff9800'],
+			    title: {
+			        text: '',
+			        x: 'center',
+			        textStyle: {
+			            color: '#30465D',
+			            fontSize: '14',
+			            fontWeight: 'bold'
+			        }
+			    },
+			    angleAxis: {
+			        type: 'category',
+			        data: ["北", "北东北", "东北", "东东北", "东", "东东南", "东南", "南东南", "南", "南西南", "西南", "西西南", "西", "西西北", "西北", "北西北"],
+			        boundaryGap: false,
+			        axisTick: {
+			            alignWithLabel: true
+			        },
+			        axisLine: {
+			            lineStyle: {
+			                color: '#30465D'
+			            }
+			        },
+			        splitLine: {
+			            show: true
+			        }
+			    },
+			    radiusAxis: {
+			        axisLine: {
+			            show: false
+			        },
+			        axisTick: {
+			            show: false
+			        },
+			        axisLabel: {
+			            formatter: '{value}%',
+			            showMaxLabel: false,
+			            color: '#30465D'
+			        },
+			        z: 10
+			    },
+			    tooltip: {},
+			    polar: {},
+			    legend: {
+			        show: true,
+			        right: 0,
+			        bottom: 0,
+			        type: 'scroll',
+			        orient: 'vertical',
+			        data: ['0.5m/s', '0.5-2m/s', '2-4m/s', '4-6m/s', '6-8m/s', '8-10m/s', '>10m/s']
+			    },
+			    series: [{
+			        type: 'bar',
+			        data: [monthData[0].northTime,monthData[0].nneTime, monthData[0].neTime, monthData[0].eneTime,monthData[0].eastTime, monthData[0].eseTime, monthData[0].seTime, monthData[0].sseTime, monthData[0].southTime, monthData[0].sswTime, monthData[0].swTime, monthData[0].wswTime, monthData[0].westTime, monthData[0].wnwTime, monthData[0].nwTime,  monthData[0].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '0.5m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [monthData[1].northTime,monthData[1].nneTime, monthData[1].neTime, monthData[1].eneTime,monthData[1].eastTime, monthData[1].eseTime, monthData[1].seTime, monthData[1].sseTime, monthData[1].southTime, monthData[1].sswTime, monthData[1].swTime, monthData[1].wswTime, monthData[1].westTime, monthData[1].wnwTime, monthData[1].nwTime,  monthData[1].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '0.5-2m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [monthData[2].northTime,monthData[2].nneTime, monthData[2].neTime, monthData[2].eneTime,monthData[2].eastTime, monthData[2].eseTime, monthData[2].seTime, monthData[2].sseTime, monthData[2].southTime, monthData[2].sswTime, monthData[2].swTime, monthData[2].wswTime, monthData[2].westTime, monthData[2].wnwTime, monthData[2].nwTime,  monthData[2].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '2-4m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [monthData[3].northTime,monthData[3].nneTime, monthData[3].neTime, monthData[3].eneTime,monthData[3].eastTime, monthData[3].eseTime, monthData[3].seTime, monthData[3].sseTime, monthData[3].southTime, monthData[3].sswTime, monthData[3].swTime, monthData[3].wswTime, monthData[3].westTime, monthData[3].wnwTime, monthData[3].nwTime,  monthData[3].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '4-6m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [monthData[4].northTime,monthData[4].nneTime, monthData[4].neTime, monthData[4].eneTime,monthData[4].eastTime, monthData[4].eseTime, monthData[4].seTime, monthData[4].sseTime, monthData[4].southTime, monthData[4].sswTime, monthData[4].swTime, monthData[4].wswTime, monthData[4].westTime, monthData[4].wnwTime, monthData[4].nwTime,  monthData[4].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '6-8m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [monthData[5].northTime,monthData[5].nneTime, monthData[5].neTime, monthData[5].eneTime,monthData[5].eastTime, monthData[5].eseTime, monthData[5].seTime, monthData[5].sseTime, monthData[5].southTime, monthData[5].sswTime, monthData[5].swTime, monthData[5].wswTime, monthData[5].westTime, monthData[5].wnwTime, monthData[5].nwTime,  monthData[5].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '8-10m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [monthData[6].northTime,monthData[6].nneTime, monthData[6].neTime, monthData[6].eneTime,monthData[6].eastTime, monthData[6].eseTime, monthData[6].seTime, monthData[6].sseTime, monthData[6].southTime, monthData[6].sswTime, monthData[6].swTime, monthData[6].wswTime, monthData[6].westTime, monthData[6].wnwTime, monthData[6].nwTime,  monthData[6].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '>10m/s',
+			        stack: 'a'
+			    }]
+			};
+        var optionYear = {
+			    color: ['#70e7ef', '#3a64e9', '#f34646', '#e43185', '#b53edd', '#cddc39', '#ff9800'],
+			    title: {
+			        text: '',
+			        x: 'center',
+			        textStyle: {
+			            color: '#30465D',
+			            fontSize: '14',
+			            fontWeight: 'bold'
+			        }
+			    },
+			    angleAxis: {
+			        type: 'category',
+			        data: ["北", "北东北", "东北", "东东北", "东", "东东南", "东南", "南东南", "南", "南西南", "西南", "西西南", "西", "西西北", "西北", "北西北"],
+			        boundaryGap: false,
+			        axisTick: {
+			            alignWithLabel: true
+			        },
+			        axisLine: {
+			            lineStyle: {
+			                color: '#30465D'
+			            }
+			        },
+			        splitLine: {
+			            show: true
+			        }
+			    },
+			    radiusAxis: {
+			        axisLine: {
+			            show: false
+			        },
+			        axisTick: {
+			            show: false
+			        },
+			        axisLabel: {
+			            formatter: '{value}%',
+			            showMaxLabel: false,
+			            color: '#30465D'
+			        },
+			        z: 10
+			    },
+			    tooltip: {},
+			    polar: {},
+			    legend: {
+			        show: true,
+			        right: 0,
+			        bottom: 0,
+			        type: 'scroll',
+			        orient: 'vertical',
+			        data: ['0.5m/s', '0.5-2m/s', '2-4m/s', '4-6m/s', '6-8m/s', '8-10m/s', '>10m/s']
+			    },
+			    series: [{
+			        type: 'bar',
+			        data: [yearData[0].northTime,yearData[0].nneTime, yearData[0].neTime, yearData[0].eneTime,yearData[0].eastTime, yearData[0].eseTime, yearData[0].seTime, yearData[0].sseTime, yearData[0].southTime, yearData[0].sswTime, yearData[0].swTime, yearData[0].wswTime, yearData[0].westTime, yearData[0].wnwTime, yearData[0].nwTime,  yearData[0].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '0.5m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [yearData[1].northTime,yearData[1].nneTime, yearData[1].neTime, yearData[1].eneTime,yearData[1].eastTime, yearData[1].eseTime, yearData[1].seTime, yearData[1].sseTime, yearData[1].southTime, yearData[1].sswTime, yearData[1].swTime, yearData[1].wswTime, yearData[1].westTime, yearData[1].wnwTime, yearData[1].nwTime,  yearData[1].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '0.5-2m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [yearData[2].northTime,yearData[2].nneTime, yearData[2].neTime, yearData[2].eneTime,yearData[2].eastTime, yearData[2].eseTime, yearData[2].seTime, yearData[2].sseTime, yearData[2].southTime, yearData[2].sswTime, yearData[2].swTime, yearData[2].wswTime, yearData[2].westTime, yearData[2].wnwTime, yearData[2].nwTime,  yearData[2].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '2-4m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [yearData[3].northTime,yearData[3].nneTime, yearData[3].neTime, yearData[3].eneTime,yearData[3].eastTime, yearData[3].eseTime, yearData[3].seTime, yearData[3].sseTime, yearData[3].southTime, yearData[3].sswTime, yearData[3].swTime, yearData[3].wswTime, yearData[3].westTime, yearData[3].wnwTime, yearData[3].nwTime,  yearData[3].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '4-6m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [yearData[4].northTime,yearData[4].nneTime, yearData[4].neTime, yearData[4].eneTime,yearData[4].eastTime, yearData[4].eseTime, yearData[4].seTime, yearData[4].sseTime, yearData[4].southTime, yearData[4].sswTime, yearData[4].swTime, yearData[4].wswTime, yearData[4].westTime, yearData[4].wnwTime, yearData[4].nwTime,  yearData[4].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '6-8m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [yearData[5].northTime,yearData[5].nneTime, yearData[5].neTime, yearData[5].eneTime,yearData[5].eastTime, yearData[5].eseTime, yearData[5].seTime, yearData[5].sseTime, yearData[5].southTime, yearData[5].sswTime, yearData[5].swTime, yearData[5].wswTime, yearData[5].westTime, yearData[5].wnwTime, yearData[5].nwTime,  yearData[5].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '8-10m/s',
+			        stack: 'a'
+			    }, {
+			        type: 'bar',
+			        data: [yearData[6].northTime,yearData[6].nneTime, yearData[6].neTime, yearData[6].eneTime,yearData[6].eastTime, yearData[6].eseTime, yearData[6].seTime, yearData[6].sseTime, yearData[6].southTime, yearData[6].sswTime, yearData[6].swTime, yearData[6].wswTime, yearData[6].westTime, yearData[6].wnwTime, yearData[6].nwTime,  yearData[6].nnwTime],
+			        coordinateSystem: 'polar',
+			        name: '>10m/s',
+			        stack: 'a'
+			    }]
+			};
+        
+        // 使用刚指定的配置项和数据显示图表。
+        myChartDay.setOption(optionDay);
+        myChartMonth.setOption(optionMonth);
+        myChartYear.setOption(optionYear);
+    </script>
+
+</body>
+</html>

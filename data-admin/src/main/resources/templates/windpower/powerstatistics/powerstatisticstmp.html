@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('百度ECharts')" />
+    <script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+    <style type="text/css">
+	</style>
+</head>
+	<body>
+    <body  class="gray-bg">
+	<th:block th:include="include :: datatotal" />
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>近十五天功率统计</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="dayPower" class="echarts"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>近一年功率统计</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="monthPower" class="echarts"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>近五年功率统计</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="echarts" id="yearPower"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+		<script th:inline="javascript">
+			
+					
+		//<![CDATA[
+    	var dayData = [[${dayData}]]
+    	var monthData = [[${monthData}]]
+    	var yearData = [[${yearData}]]
+    	//]]>
+		//日统计x轴日期
+		var dayDataX = [];
+		//日统计Y轴功率
+		var dayDataY = [];
+		//月统计x轴日期
+		var monthDataX = [];
+		//月统计Y轴功率
+		var monthDataY = [];
+		//月统计x轴日期
+		var yearDataX = [];
+		//月统计Y轴功率
+		var yearDataY = [];
+		for(i=0;i<dayData.length;i++){
+			//日
+			dayDataX.unshift((dayData[i].createTime).substring(0, 10));
+			dayDataY.unshift(parseFloat(dayData[i].power).toFixed(2));
+		}
+		for(i=0;i<monthData.length;i++){
+			//月
+			monthDataX.unshift((monthData[i].createTime).substring(0, 7));
+			monthDataY.unshift(parseFloat(monthData[i].power).toFixed(2));
+		}
+		for(i=0;i<yearData.length;i++){
+			//年 ，转换单位
+			yearDataX.unshift((yearData[i].createTime).substring(0, 4));
+			yearDataY.unshift((parseFloat(yearData[i].power)/1000).toFixed(2));
+		}
+		    
+			
+		 	// 日功率统计线性图
+		    // 基于准备好的dom，初始化echarts实例
+		    var myChartDay = echarts.init(document.getElementById('dayPower'));
+			// 月功率统计线性图
+			// 基于准备好的dom，初始化echarts实例
+			var myChartMonth = echarts.init(document.getElementById('monthPower'));
+			// 年功率统计线性图
+			// 基于准备好的dom，初始化echarts实例
+			var myChartYear = echarts.init(document.getElementById('yearPower'));
+					
+			var optionDay={
+				    backgroundColor:'#0A1651',
+				    tooltip: {
+				        trigger: 'axis',
+				        axisPointer: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        }
+				    },
+				    legend: {
+				        icon: 'diamond',
+				        itemGap: 13,
+				        data: ['功率 kW'],
+				        bottom:'3%',
+				        left: 'center',
+				        textStyle: {
+				            fontSize: 12,
+				            color: '#F1F1F3'
+				        }
+				    },
+				    grid: {
+				        bottom:'10%'
+				    },
+				    xAxis: [{
+				        type: 'category',
+				        boundaryGap: false,
+				        axisLine: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        },
+				        data: dayDataX,
+				    }],
+				    yAxis: [{
+				        type: 'value',
+				        axisTick: {
+				            show: false
+				        },
+				        axisLine: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        },
+				        axisLabel: {
+				            margin: 10,
+				            textStyle: {
+				                color: "rgba(255,255,255,.6)",
+				                fontSize: '12',
+				            }
+				        },
+				        splitLine: {
+				            lineStyle: {
+				                color: "rgba(255,255,255,0.1)",
+				            }
+				        }
+				    }],
+				    series: [{
+				        name: '功率 kW',
+				        type: 'line',
+				        smooth: true,
+				        markLine:{ //最大值和最小值
+				    	data:[
+				    	{
+				    		type:"min",name:"最小值"
+				    
+				    	},
+				    	{
+				    		type:"max",name:"最大值"
+				    	}]
+				        },
+				        lineStyle: {
+				            normal: {
+				                width: 1
+				            }
+				        },
+				        itemStyle: {
+				            normal: {
+				                color:'#00A1EA'
+				            }
+				        },
+				        data: dayDataY
+				    },  ]
+
+				};	
+			var optionMonth={
+				    backgroundColor:'#0A1651',
+				    tooltip: {
+				        trigger: 'axis',
+				        axisPointer: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        }
+				    },
+				    legend: {
+				        icon: 'diamond',
+				        itemGap: 13,
+				        data: ['功率 kW'],
+				        bottom:'3%',
+				        left: 'center',
+				        textStyle: {
+				            fontSize: 12,
+				            color: '#F1F1F3'
+				        }
+				    },
+				    grid: {
+				        bottom:'10%'
+				    },
+				    xAxis: [{
+				        type: 'category',
+				        boundaryGap: false,
+				        axisLine: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        },
+				        data: monthDataX,
+				    }],
+				    yAxis: [{
+				        type: 'value',
+				        axisTick: {
+				            show: false
+				        },
+				        axisLine: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        },
+				        axisLabel: {
+				            margin: 10,
+				            textStyle: {
+				                color: "rgba(255,255,255,.6)",
+				                fontSize: '12',
+				            }
+				        },
+				        splitLine: {
+				            lineStyle: {
+				                color: "rgba(255,255,255,0.1)",
+				            }
+				        }
+				    }],
+				    series: [{
+				        name: '功率 kW',
+				        type: 'line',
+				        smooth: true,
+				        markLine:{ //最大值和最小值
+				    	data:[
+				    	{
+				    		type:"min",name:"最小值"
+				    
+				    	},
+				    	{
+				    		type:"max",name:"最大值"
+				    	}]
+				        },
+				        lineStyle: {
+				            normal: {
+				                width: 1
+				            }
+				        },
+				        itemStyle: {
+				            normal: {
+				                color:'#00A1EA'
+				            }
+				        },
+				        data: monthDataY
+				    },  ]
+
+				};		
+			var optionYear={
+				    backgroundColor:'#0A1651',
+				    tooltip: {
+				        trigger: 'axis',
+				        axisPointer: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        }
+				    },
+				    legend: {
+				        icon: 'diamond',
+				        itemGap: 13,
+				        data: ['功率 MW'],
+				        bottom:'3%',
+				        left: 'center',
+				        textStyle: {
+				            fontSize: 12,
+				            color: '#F1F1F3'
+				        }
+				    },
+				    grid: {
+				        bottom:'10%'
+				    },
+				    xAxis: [{
+				        type: 'category',
+				        boundaryGap: false,
+				        axisLine: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        },
+				        data: yearDataX,
+				    }],
+				    yAxis: [{
+				        type: 'value',
+				        axisTick: {
+				            show: false
+				        },
+				        axisLine: {
+				            lineStyle: {
+				                color: '#57617B'
+				            }
+				        },
+				        axisLabel: {
+				            margin: 10,
+				            textStyle: {
+				                color: "rgba(255,255,255,.6)",
+				                fontSize: '12',
+				            }
+				        },
+				        splitLine: {
+				            lineStyle: {
+				                color: "rgba(255,255,255,0.1)",
+				            }
+				        }
+				    }],
+				    series: [{
+				        name: '功率 MW',
+				        type: 'line',
+				        smooth: true,
+				        markLine:{ //最大值和最小值
+				    	data:[
+				    	{
+				    		type:"min",name:"最小值"
+				    
+				    	},
+				    	{
+				    		type:"max",name:"最大值"
+				    	}]
+				        },
+				        lineStyle: {
+				            normal: {
+				                width: 1
+				            }
+				        },
+				        itemStyle: {
+				            normal: {
+				                color:'#00A1EA'
+				            }
+				        },
+				        data: yearDataY
+				    },  ]
+
+				};		
+			// 使用刚指定的配置项和数据显示图表。
+		    myChartDay.setOption(optionDay);
+			myChartMonth.setOption(optionMonth);
+			myChartYear.setOption(optionYear);
+		</script>
+	</body>
+</html>

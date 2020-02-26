@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizFanFailureMapper">
+    
+    <resultMap type="com.data.biz.domain.BizFanFailure" id="BizFanFailureResult">
+        <result property="id"    column="id"    />
+        <result property="fanId"    column="fan_id"    />
+        <result property="type"    column="type"    />
+        <result property="principal"    column="principal"    />
+        <result property="status"    column="status"    />
+        <result property="processingTime"    column="processing_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBizFanFailureVo">
+        select id, fan_id, type, principal, status, processing_time, create_time, remark from biz_fan_failure
+    </sql>
+
+    <select id="selectBizFanFailureList" parameterType="BizFanFailure" resultMap="BizFanFailureResult">
+        <include refid="selectBizFanFailureVo"/>
+        <where>  
+            <if test="fanId != null "> and fan_id = #{fanId}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="principal != null  and principal != ''"> and principal = #{principal}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="processingTime != null "> and processing_time = #{processingTime}</if>
+        </where>
+    </select>
+    
+    <select id="mySelectBizFanFailureList">
+    <include refid="selectBizFanFailureVo"/>
+        <where>  
+            <if test="fanId != null "> and fan_id = #{fanId}</if>
+            <if test="type != null "> and type = #{type}</if>
+            <if test="principal != null  and principal != ''"> and principal = #{principal}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="processingTime != null "> and processing_time = #{processingTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizFanFailureById" parameterType="Long" resultMap="BizFanFailureResult">
+        <include refid="selectBizFanFailureVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizFanFailure" parameterType="BizFanFailure">
+        insert into biz_fan_failure
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="fanId != null ">fan_id,</if>
+            <if test="type != null ">type,</if>
+            <if test="principal != null  and principal != ''">principal,</if>
+            <if test="status != null ">status,</if>
+            <if test="processingTime != null ">processing_time,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="fanId != null ">#{fanId},</if>
+            <if test="type != null ">#{type},</if>
+            <if test="principal != null  and principal != ''">#{principal},</if>
+            <if test="status != null ">#{status},</if>
+            <if test="processingTime != null ">#{processingTime},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizFanFailure" parameterType="BizFanFailure">
+        update biz_fan_failure
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fanId != null ">fan_id = #{fanId},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="principal != null  and principal != ''">principal = #{principal},</if>
+            <if test="status != null ">status = #{status},</if>
+            <if test="processingTime != null ">processing_time = #{processingTime},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizFanFailureById" parameterType="Long">
+        delete from biz_fan_failure where id = #{id}
+    </delete>
+
+    <delete id="deleteBizFanFailureByIds" parameterType="String">
+        delete from biz_fan_failure where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 统计叶片故障(次数) -->
+    <select id="selectVaneCount" parameterType="long" resultType="int">
+    select COUNT(*) from biz_fan_failure where type = 1 and fan_id = #{id};
+    </select>
+    
+    <!-- 转向故障(次数) -->
+    <select id="selectTurnCount" parameterType="long" resultType="int">
+    select COUNT(*) from biz_fan_failure where type = 2 and fan_id = #{id};
+    </select>
+    
+    <!-- 统计发电机故障(次数) -->
+    <select id="selectDynamoCount" parameterType="long" resultType="int">
+    select COUNT(*) from biz_fan_failure where type = 3 and fan_id = #{id};
+    </select>
+    
+    <!-- 统计其他故障(次数) -->
+    <select id="selectElseCount" parameterType="long" resultType="int">
+    select COUNT(*) from biz_fan_failure where type = 4 and fan_id = #{id};
+    </select>
+    <!-- 状态修改 -->
+   <update id="updateStatus">
+   update biz_fan_failure set status = 3,processing_time = now(),remark=#{remark}
+   where id=#{failureId}
+   </update>
+</mapper>

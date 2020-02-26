@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<link rel="stylesheet" type="text/css" href="/css/mdui.min.css"/>
+	<script src="/js/mdui.min.js" type="text/javascript" charset="utf-8"></script>
+	<th:block th:include="include :: header('表格数据汇总')" />
+	</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+		    <div class="col-sm-12 search-collapse">
+				<form id="time-form">
+					<div class="select-list">
+						<ul>
+							<li class="select-time">
+								<label>创建时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('time-form')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+							<li>
+								<a class="btn btn-info btn-rounded btn-sm" onclick=""><i class="fa fa-search"></i>&nbsp;导出</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <th:block th:include="include :: layout-latest-js" />
+	<th:block th:include="include :: ztree-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "windpower/fanalertmanage";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+
+        $(function() {
+        	dispose=function(failureId){
+        			  mdui.prompt('确定要修复这个故障吗?(请填写修复内容)',
+        			    function (value) {
+        	        		$.ajax({
+        	        			url:"fanalertmanage/updateStatus",
+        	        			Type:"post",
+        	        			data:{
+        	        				failure_Id:failureId,
+        	        				remark:value,
+        	        			},
+        	        			dataType:"json",
+        	        			success:function(data){
+        	        				console.log(data);
+        	        				if(data.code == 0){
+        	        					mdui.alert("提交完毕!");
+        	        					$.table.destroy();
+        	        	            	$.table.init(options);
+        	        				}
+        	        			}
+        	        		})
+        			    },
+        			  );
+        	}
+        	
+        	
+            var options = {
+                url: prefix + "/list",
+		        showFooter: true,
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+				searchable:true,
+				sortName: "createTime",
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '序号'
+				},
+				{
+					field : 'fanId', 
+					title : '风机编号'
+				},
+				{
+					field : 'brand', 
+					title : '风机品牌'
+				},
+				{
+					field : 'power', 
+					title : '风机功率(KW)',
+					formatter:function(value,row,index){
+						return value;
+					}
+				},
+				{
+					field : 'type', 
+					title : '报警类型',
+					formatter:function(value,row,index){
+						if(value==1){
+							return "叶片故障";
+						}else if(value==2){
+							return "转向故障";
+						}else if(value==3){
+							return "发电机故障";
+						}else if(value==4){
+							return "其他故障";
+						}
+					}
+				},
+				{
+					field : 'createTime', 
+					title : '报警时间',
+					sortable: true
+				},
+				{
+					field : 'principal', 
+					title : '负责人'
+				},
+				{
+					field : 'processingTime', 
+					title : '处理时间'
+				},
+				{
+					field : 'remark', 
+					title : '处理描述',
+					formatter:function(value,row,index){
+						if(value == ""){
+							return "暂无信息";
+						}
+						return value;
+					}
+				},
+				{
+					field : 'status', 
+					title : '处理情况',
+					//1未处理2处理中3已处理
+					formatter:function(value,row,index){
+						if(value==1){
+							return "未处理";
+						}else if(value==2){
+							return "处理中";
+						}else if(value==3){
+							return "已处理";
+						}
+						return "没有数据";
+					}
+				},
+				{
+					field : 'direction5', 
+					title : '操作',
+					formatter:function(value,row,index){
+						if(row.status == 3){
+							return "<a>已处理</a>"
+						}
+					   return "<a class='btn btn-info' id='manage' onclick='dispose("+row.id+")'>处理</a>";	
+					},
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

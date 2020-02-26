@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizPowerPlantMapper">
+    
+    <resultMap type="com.data.biz.domain.BizPowerPlant" id="BizPowerPlantResult">
+        <result property="id"    column="id"    />
+        <result property="plantCode"    column="plant_code"    />
+        <result property="total"    column="total"    />
+        <result property="capacity"    column="capacity"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBizPowerPlantVo">
+        select id, plant_code, total, capacity, create_time from biz_power_plant
+    </sql>
+
+	<select id="selectFanGeneratingHours" parameterType="long" resultType="bigdecimal">
+		SELECT hour(timediff(NOW(),create_time))+minute(timediff(NOW(),create_time))/60 FROM biz_power_plant
+	</select>
+
+    <select id="selectBizPowerPlantList" parameterType="BizPowerPlant" resultMap="BizPowerPlantResult">
+        <include refid="selectBizPowerPlantVo"/>
+        <where>  
+            <if test="plantCode != null  and plantCode != ''"> and plant_code = #{plantCode}</if>
+            <if test="total != null "> and total = #{total}</if>
+            <if test="capacity != null  and capacity != ''"> and capacity = #{capacity}</if>
+        </where>
+    </select>
+    
+    <select id="selectBizPowerPlantById" parameterType="Long" resultMap="BizPowerPlantResult">
+        <include refid="selectBizPowerPlantVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBizPowerPlant" parameterType="BizPowerPlant">
+        insert into biz_power_plant
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">id,</if>
+            <if test="plantCode != null  and plantCode != ''">plant_code,</if>
+            <if test="total != null ">total,</if>
+            <if test="capacity != null  and capacity != ''">capacity,</if>
+            <if test="createTime != null ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="plantCode != null  and plantCode != ''">#{plantCode},</if>
+            <if test="total != null ">#{total},</if>
+            <if test="capacity != null  and capacity != ''">#{capacity},</if>
+            <if test="createTime != null ">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBizPowerPlant" parameterType="BizPowerPlant">
+        update biz_power_plant
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="plantCode != null  and plantCode != ''">plant_code = #{plantCode},</if>
+            <if test="total != null ">total = #{total},</if>
+            <if test="capacity != null  and capacity != ''">capacity = #{capacity},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizPowerPlantById" parameterType="Long">
+        delete from biz_power_plant where id = #{id}
+    </delete>
+
+    <delete id="deleteBizPowerPlantByIds" parameterType="String">
+        delete from biz_power_plant where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="getPlantDataById" resultType="com.data.biz.domain.BizPlantDataTotal">
+    SELECT
+		p.capacity,
+		count( f.id ) AS fanNum,
+		(
+			HOUR ( timediff( NOW( ), p.create_time ) ) + MINUTE ( timediff( NOW( ), p.create_time ) ) / 60 
+		) AS hours,
+		(
+		SELECT
+			sum( power_generation ) 
+		FROM
+			biz_fan_datatotal_day 
+		WHERE
+			fan_id IN ( SELECT f.id FROM biz_fan f WHERE f.power_plant_id = p.id ) 
+		) AS powerGenerationNum 
+	FROM
+		biz_power_plant p
+	LEFT JOIN 
+		biz_fan f ON p.id = f.power_plant_id 
+	WHERE
+		p.id = #{id}
+    </select>
+</mapper>

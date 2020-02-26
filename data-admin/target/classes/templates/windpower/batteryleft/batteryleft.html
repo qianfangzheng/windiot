@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+	<head>
+		<meta charset="utf-8">
+		<title>电量统计</title>
+		<script src="/js/jquery-2.0.0.min.js" type="text/javascript" charset="utf-8"></script>
+		<th:block th:include="include :: header('百度ECharts')" />
+    <script src="https://cdn.bootcss.com/echarts/4.4.0-rc.1/echarts.min.js"></script>
+	</head>
+	<body>
+	<th:block th:include="include :: datatotal" />
+		<div class="container-fluid">
+		<div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5><button type="button" id="dayDetailedBtn" class="btn btn-info">查看详情</button></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+					<div id="dayElectric" style="width: 100%;height:500px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5><button type="button" id="monthDetailedBtn" class="btn btn-info">查看详情</button></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+					<div id="monthElectric" style="width: 100%;height:500px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+			<div class="row">
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5><button type="button" id="yearDetailedBtn" class="btn btn-info" >查看详情</button></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="graph_flot.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="graph_flot.html#">选项1</a>
+                                </li>
+                                <li><a href="graph_flot.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+					<div id="yearElectric" style="width: 100%;height:500px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		</div>
+		<script type="text/javascript">
+		$(document).ready(function(){
+			$("#yearDetailedBtn").click(function(){
+				location.href="electricdetailed/electricdetailedFlag?dataToken=yearData";
+			})
+			$("#monthDetailedBtn").click(function(){
+				location.href="electricdetailed/electricdetailedFlag?dataToken=monthData";
+			})
+			$("#dayDetailedBtn").click(function(){
+				location.href="electricdetailed/electricdetailedFlag?dataToken=dayData";
+			})
+		})
+		// 日月年表的发电量数据
+		var dayData = [];
+		var monthData = [];
+		var yearData = [];
+		// 日月年表的发电量数据的最近日期
+		var dayDateTime = [];
+		var monthDateTime = [];
+		var yearDateTime = [];
+		$.ajax({
+			url:"batteryleft/listBatteryleft",
+			async:false,
+			Type:"post",
+			dataType:"json",
+			success:function(data){
+				//=================获取日月年表的发电量数据===================
+				// 循环获取日表中的发电量值
+				for(var i=0;i<data["dayData"].length;i++){
+					dayData[i] = data["dayData"][i].power_generation;
+				}
+				// 循环获取月表中的发电量值
+				for(var i=0;i<data["monthData"].length;i++){
+					monthData[i] = data["monthData"][i].power_generation;
+				}
+				// 循环获取年表中的发电量值
+				for(var i=0;i<data["yearData"].length;i++){
+					yearData[i] = data["yearData"][i].power_generation;
+				}
+				//=================获取日月年表的发电量最近时间===================
+				// 循环获取日表中的发电量最近时间
+				for(var i=0;i<data["dayData"].length;i++){
+					dayDateTime[i] = data["dayData"][i].createTime.substring(0,10);
+				}
+				// 循环获取月表中的发电量最近时间
+				for(var i=0;i<data["monthData"].length;i++){
+					monthDateTime[i] = data["monthData"][i].createTime.substring(0,10);
+				}
+				// 循环获取年表中的发电量最近时间
+				for(var i=0;i<data["yearData"].length;i++){
+					yearDateTime[i] = data["yearData"][i].createTime.substring(0,10);
+				}
+			}
+		});
+		option1 = {
+			     title: {
+				        text: '近日发电量统计',
+				        textStyle: {
+				        	 align: 'center',
+				            color: '#fff',
+				            fontSize: 20,
+				        },
+				        top: '3%',
+				        left: '10%',
+				    },
+			    backgroundColor: '#0f375f',
+			    grid: {
+			        top: "25%",
+			        bottom: "10%"
+			    },
+			    tooltip: {
+			        trigger: "axis",
+			        axisPointer: {
+			            type: "shadow",
+			            label: {
+			                show: true
+			            }
+			        }
+			    },
+			    legend: {
+			        data: ["发电量折线", "发电量"],
+			        top: "15%",
+			        textStyle: {
+			            color: "#ffffff"
+			        }
+			    },
+			    xAxis: {
+			        data: dayDateTime,
+			        axisLine: {
+			            show: true //隐藏X轴轴线
+			        },
+			        axisTick: {
+			            show: true //隐藏X轴刻度
+			        },
+			        axisLabel: {
+			            show: true,
+			            textStyle: {
+			                color: "#ebf8ac" //X轴文字颜色
+			            }
+			        },
+			         axisLine: {
+			                    lineStyle: {
+			                        color: '#01FCE3'
+			                        }
+			                },
+			    },
+			    yAxis: [{
+			            type: "value",
+			            name: "KW",
+			            nameTextStyle: {
+			                color: "#ebf8ac"
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: true
+			            },
+			            axisLine: {
+			                show: true
+			            },
+			            axisLabel: {
+			                show: true,
+			                textStyle: {
+			                    color: "#ebf8ac"
+			                }
+			            },
+			             axisLine: {
+			                        lineStyle: {
+			                            color: '#FFFFFF'
+			                            }
+			                    },
+			        },
+			        {
+			            type: "value",
+			            name: "",
+			            nameTextStyle: {
+			                color: "#ebf8ac"
+			            },
+			            position: "right",
+			            splitLine: {
+			                show: false
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: false
+			            },
+			            axisLine: {
+			                show: false
+			            },
+			            axisLabel: {
+			                show: false,
+			                formatter: "{value} %", //右侧Y轴文字显示
+			                textStyle: {
+			                    color: "#ebf8ac"
+			                }
+			            }
+			        },
+			        {
+			            type: "value",
+			            gridIndex: 0,
+			            min: 50,
+			            max: 100,
+			            splitNumber: 8,
+			            splitLine: {
+			                show: false
+			            },
+			            axisLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: false
+			            },
+			            axisLabel: {
+			                show: false
+			            },
+			            splitArea: {
+			                show: true,
+			                areaStyle: {
+			                    color: ["rgba(250,250,250,0.0)", "rgba(250,250,250,0.05)"]
+			                }
+			            }
+			        }
+			    ],
+			    series: [{
+			            name: "电量曲线",
+			            type: "line",
+			            yAxisIndex: 1, //使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
+			            smooth: true, //平滑曲线显示
+			            showAllSymbol: true, //显示所有图形。
+			            symbol: "circle", //标记的图形为实心圆
+			            symbolSize: 10, //标记的大小
+			            itemStyle: {
+			                //折线拐点标志的样式
+			                color: "#058cff"
+			            },
+			            lineStyle: {
+			                color: "#058cff"
+			            },
+			            areaStyle:{
+			                color: "rgba(5,140,255, 0.2)"
+			            },
+			            data: dayData
+			        },
+			        {
+			            name: "发电量",
+			            type: "bar",
+			            barWidth: 15,
+			            itemStyle: {
+			                normal: {
+			                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+			                            offset: 0,
+			                            color: "#00FFE3"
+			                        },
+			                        {
+			                            offset: 1,
+			                            color: "#4693EC"
+			                        }
+			                    ])
+			                }
+			            },
+			            data: dayData
+			        }
+			    ]
+			};
+		
+		
+		
+		option2 = {
+			     title: {
+				        text: '近月发电量统计',
+				        textStyle: {
+				        	 align: 'center',
+				            color: '#fff',
+				            fontSize: 20,
+				        },
+				        top: '3%',
+				        left: '10%',
+				    },
+			    backgroundColor: '#0f375f',
+			    grid: {
+			        top: "25%",
+			        bottom: "10%"
+			    },
+			    tooltip: {
+			        trigger: "axis",
+			        axisPointer: {
+			            type: "shadow",
+			            label: {
+			                show: true
+			            }
+			        }
+			    },
+			    legend: {
+			        data: ["发电量折线", "发电量"],
+			        top: "15%",
+			        textStyle: {
+			            color: "#ffffff"
+			        }
+			    },
+			    xAxis: {
+			        data: monthDateTime,
+			        axisLine: {
+			            show: true //隐藏X轴轴线
+			        },
+			        axisTick: {
+			            show: true //隐藏X轴刻度
+			        },
+			        axisLabel: {
+			            show: true,
+			            textStyle: {
+			                color: "#ebf8ac" //X轴文字颜色
+			            }
+			        },
+			         axisLine: {
+			                    lineStyle: {
+			                        color: '#01FCE3'
+			                        }
+			                },
+			    },
+			    yAxis: [{
+			            type: "value",
+			            name: "KW",
+			            nameTextStyle: {
+			                color: "#ebf8ac"
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: true
+			            },
+			            axisLine: {
+			                show: true
+			            },
+			            axisLabel: {
+			                show: true,
+			                textStyle: {
+			                    color: "#ebf8ac"
+			                }
+			            },
+			             axisLine: {
+			                        lineStyle: {
+			                            color: '#FFFFFF'
+			                            }
+			                    },
+			        },
+			        {
+			            type: "value",
+			            name: "",
+			            nameTextStyle: {
+			                color: "#ebf8ac"
+			            },
+			            position: "right",
+			            splitLine: {
+			                show: false
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: false
+			            },
+			            axisLine: {
+			                show: false
+			            },
+			            axisLabel: {
+			                show: false,
+			                formatter: "{value} %", //右侧Y轴文字显示
+			                textStyle: {
+			                    color: "#ebf8ac"
+			                }
+			            }
+			        },
+			        {
+			            type: "value",
+			            gridIndex: 0,
+			            min: 50,
+			            max: 100,
+			            splitNumber: 8,
+			            splitLine: {
+			                show: false
+			            },
+			            axisLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: false
+			            },
+			            axisLabel: {
+			                show: false
+			            },
+			            splitArea: {
+			                show: true,
+			                areaStyle: {
+			                    color: ["rgba(250,250,250,0.0)", "rgba(250,250,250,0.05)"]
+			                }
+			            }
+			        }
+			    ],
+			    series: [{
+			            name: "电量曲线",
+			            type: "line",
+			            yAxisIndex: 1, //使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
+			            smooth: true, //平滑曲线显示
+			            showAllSymbol: true, //显示所有图形。
+			            symbol: "circle", //标记的图形为实心圆
+			            symbolSize: 10, //标记的大小
+			            itemStyle: {
+			                //折线拐点标志的样式
+			                color: "#058cff"
+			            },
+			            lineStyle: {
+			                color: "#058cff"
+			            },
+			            areaStyle:{
+			                color: "rgba(5,140,255, 0.2)"
+			            },
+			            data: monthData
+			        },
+			        {
+			            name: "发电量",
+			            type: "bar",
+			            barWidth: 15,
+			            itemStyle: {
+			                normal: {
+			                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+			                            offset: 0,
+			                            color: "#00FFE3"
+			                        },
+			                        {
+			                            offset: 1,
+			                            color: "#4693EC"
+			                        }
+			                    ])
+			                }
+			            },
+			            data: monthData
+			        }
+			    ]
+			};
+		
+		
+		option3 = {
+			     title: {
+				        text: '近年发电量统计',
+				        textStyle: {
+				        	 align: 'center',
+				            color: '#fff',
+				            fontSize: 20,
+				        },
+				        top: '3%',
+				        left: '10%',
+				    },
+			    backgroundColor: '#0f375f',
+			    grid: {
+			        top: "25%",
+			        bottom: "10%"
+			    },
+			    tooltip: {
+			        trigger: "axis",
+			        axisPointer: {
+			            type: "shadow",
+			            label: {
+			                show: true
+			            }
+			        }
+			    },
+			    legend: {
+			        data: ["发电量折线", "发电量"],
+			        top: "15%",
+			        textStyle: {
+			            color: "#ffffff"
+			        }
+			    },
+			    xAxis: {
+			        data: yearDateTime,
+			        axisLine: {
+			            show: true //隐藏X轴轴线
+			        },
+			        axisTick: {
+			            show: true //隐藏X轴刻度
+			        },
+			        axisLabel: {
+			            show: true,
+			            textStyle: {
+			                color: "#ebf8ac" //X轴文字颜色
+			            }
+			        },
+			         axisLine: {
+			                    lineStyle: {
+			                        color: '#01FCE3'
+			                        }
+			                },
+			    },
+			    yAxis: [{
+			            type: "value",
+			            name: "KW",
+			            nameTextStyle: {
+			                color: "#ebf8ac"
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: true
+			            },
+			            axisLine: {
+			                show: true
+			            },
+			            axisLabel: {
+			                show: true,
+			                textStyle: {
+			                    color: "#ebf8ac"
+			                }
+			            },
+			             axisLine: {
+			                        lineStyle: {
+			                            color: '#FFFFFF'
+			                            }
+			                    },
+			        },
+			        {
+			            type: "value",
+			            name: "",
+			            nameTextStyle: {
+			                color: "#ebf8ac"
+			            },
+			            position: "right",
+			            splitLine: {
+			                show: false
+			            },
+			            splitLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: false
+			            },
+			            axisLine: {
+			                show: false
+			            },
+			            axisLabel: {
+			                show: false,
+			                formatter: "{value} %", //右侧Y轴文字显示
+			                textStyle: {
+			                    color: "#ebf8ac"
+			                }
+			            }
+			        },
+			        {
+			            type: "value",
+			            gridIndex: 0,
+			            min: 50,
+			            max: 100,
+			            splitNumber: 8,
+			            splitLine: {
+			                show: false
+			            },
+			            axisLine: {
+			                show: false
+			            },
+			            axisTick: {
+			                show: false
+			            },
+			            axisLabel: {
+			                show: false
+			            },
+			            splitArea: {
+			                show: true,
+			                areaStyle: {
+			                    color: ["rgba(250,250,250,0.0)", "rgba(250,250,250,0.05)"]
+			                }
+			            }
+			        }
+			    ],
+			    series: [{
+			            name: "电量曲线",
+			            type: "line",
+			            yAxisIndex: 1, //使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
+			            smooth: true, //平滑曲线显示
+			            showAllSymbol: true, //显示所有图形。
+			            symbol: "circle", //标记的图形为实心圆
+			            symbolSize: 10, //标记的大小
+			            itemStyle: {
+						//折线拐点标志的样式
+			                color: "#058cff"
+			            },
+			            lineStyle: {
+			                color: "#058cff"
+			            },
+			            areaStyle:{
+			                color: "rgba(5,140,255, 0.2)"
+			            },
+			            data: yearData
+			        },
+			        {
+			            name: "发电量",
+			            type: "bar",
+			            barWidth: 15,
+			            itemStyle: {
+			                normal: {
+			                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+			                            offset: 0,
+			                            color: "#00FFE3"
+			                        },
+			                        {
+			                            offset: 1,
+			                            color: "#4693EC"
+			                        }
+			                    ])
+			                }
+			            },
+			            data: yearData
+			        }
+			    ]
+			};
+		
+		
+			                // 瞬时发电率折线图PowerGR
+					        // 基于准备好的dom，初始化echarts实例
+					        var myChart = echarts.init(document.getElementById('dayElectric'));
+					        // 使用刚指定的配置项和数据显示图表。
+					        myChart.setOption(option1);
+							// 风速折线图windSpeed
+							// 基于准备好的dom，初始化echarts实例
+							var myChart = echarts.init(document.getElementById('monthElectric'));
+							// 使用刚指定的配置项和数据显示图表。
+							myChart.setOption(option2);
+							// 瞬时发电率折线图PowerGR
+							// 基于准备好的dom，初始化echarts实例
+							var myChart = echarts.init(document.getElementById('yearElectric'));
+							// 使用刚指定的配置项和数据显示图表。
+							myChart.setOption(option3);
+					    </script>
+	</body>
+</html>

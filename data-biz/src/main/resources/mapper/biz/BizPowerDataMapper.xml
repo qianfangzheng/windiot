@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.data.biz.mapper.BizPowerDataMapper">
+
+	<resultMap type="com.data.biz.dto.PowerDataDTO"
+		id="powerDataDtoMap">
+		<result column="radio" property="ratio" />
+		<result column="section" property="section" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+
+	<select id="recentlyDay" parameterType="int" resultType="date">
+		SELECT create_time
+		FROM biz_power_data
+		WHERE datetype = #{datatype}
+		GROUP BY create_time
+		order by create_time desc
+		LIMIT 0,#{size}
+	</select>
+
+	<select id="listPowerDataDTODay" resultMap="powerDataDtoMap">
+		SELECT ratio as radio,section,create_time
+		FROM biz_power_data
+		WHERE datetype = 1 and plant_id = 1
+		order by create_time desc LIMIT 0,28
+	</select>
+
+
+	<select id="listPowerDataDTOMonth" resultMap="powerDataDtoMap">
+		SELECT ratio as radio,section,create_time
+		FROM biz_power_data 
+		WHERE datetype = 2 and plant_id = 1
+		order by create_time desc LIMIT 0,60
+	</select>
+
+
+	<select id="listPowerDataDTOYear" resultMap="powerDataDtoMap">
+		SELECT ratio as radio,section,create_time
+		FROM biz_power_data
+		WHERE datetype = 3 and plant_id = 1
+		order by create_time desc LIMIT 0,20
+	</select>
+	
+	<insert id="insertModel" parameterType="com.data.biz.domain.BizPowerData">
+		INSERT INTO `biz_power_data`(`plant_id`, `ratio`, `create_time`, `section`, `datetype`) 
+		VALUES (#{plantId}, #{ratio}, #{createTime}, #{section}, #{dateType});
+	
+	</insert>
+
+</mapper>
